@@ -1,0 +1,14 @@
+{
+  "$comment": "Canonical route table. Non-TS consumers (Forge Rust) assert their request paths against these patterns. {param} segments are URL-encoded by callers.",
+  "profileApi": {
+    "publicByUserId": "/profiles/{userId}",
+    "publicByHandle": "/profiles/handle/{handle}",
+    "me": "/me"
+  },
+  "forgeMarket": {
+    "download": "/api/forge/kits/{slug}/download",
+    "submissionUploadUrl": "/api/forge/submissions/upload-url",
+    "submissionValidate": "/api/forge/submissions/{submissionId}/validate",
+    "publisherProfile": "/api/forge/publisher-profile"
+  }
+}

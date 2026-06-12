@@ -1,0 +1,11 @@
+{
+  "$comment": "Canonical service base URLs per environment. Infra repos own these values; apps must read service URLs from here (or from env vars documented to match these) rather than hardcoding.",
+  "production": {
+    "profileApi": "https://glz766c120.execute-api.us-east-1.amazonaws.com/prod",
+    "marketBackendApi": "https://u8u5r1puai.execute-api.us-east-1.amazonaws.com/v0",
+    "marketApp": "https://market.agentkitproject.com",
+    "profileApp": "https://profile.agentkitproject.com",
+    "forgeSite": "https://forge.agentkitproject.com",
+    "projectSite": "https://agentkitproject.com"
+  }
+}
