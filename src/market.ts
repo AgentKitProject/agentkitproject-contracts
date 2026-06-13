@@ -93,9 +93,16 @@ export const marketBackendRoutes = {
   adminPublishSubmission: (submissionId: string) =>
     `/admin/submissions/${encodeURIComponent(submissionId)}/publish`,
   adminListSubmissions: () => "/admin/submissions",
+  adminGetSubmission: (submissionId: string) =>
+    `/admin/submissions/${encodeURIComponent(submissionId)}`,
+  adminRemoveSubmission: (submissionId: string) =>
+    `/admin/submissions/${encodeURIComponent(submissionId)}/remove`,
   adminDownloadUrlBySlug: (slug: string) => `/admin/kits/by-slug/${encodeURIComponent(slug)}/download-url`,
+  adminDownloadUrlByKitId: (kitId: string) =>
+    `/admin/kits/${encodeURIComponent(kitId)}/download-url`,
   adminHideKit: (kitId: string) => `/admin/kits/${encodeURIComponent(kitId)}/hide`,
   adminUnhideKit: (kitId: string) => `/admin/kits/${encodeURIComponent(kitId)}/unhide`,
+  adminRemoveKit: (kitId: string) => `/admin/kits/${encodeURIComponent(kitId)}/remove`,
   userCancelSubmission: (submissionId: string) =>
     `/users/submissions/${encodeURIComponent(submissionId)}/cancel`,
   userRemoveKit: (kitId: string) => `/users/kits/${encodeURIComponent(kitId)}/remove`
