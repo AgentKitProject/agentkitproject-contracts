@@ -27,6 +27,8 @@ export const submissionStatusSchema = z.enum([
 ]);
 export const validationStatusSchema = z.enum(["pending", "queued", "running", "passed", "failed"]);
 export const reviewStatusSchema = z.enum(["pending", "approved", "rejected"]);
+/** Whether a submission registers a brand-new kit or a new version of an existing one. */
+export const submissionTypeSchema = z.enum(["new_kit", "version_update"]);
 export const listingDraftSchema = z.object({
     name: z.string(),
     summary: z.string(),
@@ -43,7 +45,11 @@ export const forgeUploadBackendRequestSchema = z.object({
     listingDraft: listingDraftSchema,
     submittedByUserId: z.string().min(1),
     submittedByEmail: z.string().min(1),
-    publisherSnapshot: publisherSnapshotSchema.optional()
+    publisherSnapshot: publisherSnapshotSchema.optional(),
+    /** new_kit (default) or version_update of an existing owned kit. */
+    submissionType: submissionTypeSchema.optional(),
+    /** For version_update: the kitId being updated. Ownership is enforced server-side. */
+    targetKitId: z.string().min(1).optional()
 });
 /** Response Forge receives from POST /api/forge/submissions/upload-url. */
 export const forgeUploadUrlResponseSchema = z.object({
@@ -52,6 +58,23 @@ export const forgeUploadUrlResponseSchema = z.object({
     method: z.enum(["PUT", "POST"]),
     fields: z.record(z.string()),
     headers: z.record(z.string())
+});
+/**
+ * Response Forge receives from POST /api/forge/kits/{slug}/download.
+ * Carries the presigned download URL plus provenance used by installed-kit
+ * metadata / update detection (Bridge 5).
+ */
+export const forgeDownloadResponseSchema = z.object({
+    downloadUrl: z.string().url(),
+    marketKitId: z.string().optional(),
+    marketSlug: z.string().optional(),
+    version: z.string().optional(),
+    sha256: z.string().optional(),
+    packageSizeBytes: z.number().optional(),
+    publishedAt: z.string().optional(),
+    sourceUrl: z.string().optional(),
+    fileName: z.string().optional(),
+    expiresIn: z.number().optional()
 });
 /** Routes Forge calls on the Market web app (Seam A). */
 export const forgeMarketRoutes = {

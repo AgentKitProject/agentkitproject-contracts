@@ -15,6 +15,9 @@ export declare const validationStatusSchema: z.ZodEnum<["pending", "queued", "ru
 export type ValidationStatus = z.infer<typeof validationStatusSchema>;
 export declare const reviewStatusSchema: z.ZodEnum<["pending", "approved", "rejected"]>;
 export type ReviewStatus = z.infer<typeof reviewStatusSchema>;
+/** Whether a submission registers a brand-new kit or a new version of an existing one. */
+export declare const submissionTypeSchema: z.ZodEnum<["new_kit", "version_update"]>;
+export type SubmissionType = z.infer<typeof submissionTypeSchema>;
 export declare const listingDraftSchema: z.ZodObject<{
     name: z.ZodString;
     summary: z.ZodString;
@@ -78,6 +81,10 @@ export declare const forgeUploadBackendRequestSchema: z.ZodObject<{
         avatarInitials: string | null;
         verified: boolean;
     }>>;
+    /** new_kit (default) or version_update of an existing owned kit. */
+    submissionType: z.ZodOptional<z.ZodEnum<["new_kit", "version_update"]>>;
+    /** For version_update: the kitId being updated. Ownership is enforced server-side. */
+    targetKitId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     fileName: string;
     version: string;
@@ -97,6 +104,8 @@ export declare const forgeUploadBackendRequestSchema: z.ZodObject<{
         avatarInitials: string | null;
         verified: boolean;
     } | undefined;
+    submissionType?: "new_kit" | "version_update" | undefined;
+    targetKitId?: string | undefined;
 }, {
     fileName: string;
     version: string;
@@ -116,6 +125,8 @@ export declare const forgeUploadBackendRequestSchema: z.ZodObject<{
         avatarInitials: string | null;
         verified: boolean;
     } | undefined;
+    submissionType?: "new_kit" | "version_update" | undefined;
+    targetKitId?: string | undefined;
 }>;
 export type ForgeUploadBackendRequest = z.infer<typeof forgeUploadBackendRequestSchema>;
 /** Response Forge receives from POST /api/forge/submissions/upload-url. */
@@ -139,6 +150,46 @@ export declare const forgeUploadUrlResponseSchema: z.ZodObject<{
     headers: Record<string, string>;
 }>;
 export type ForgeUploadUrlResponse = z.infer<typeof forgeUploadUrlResponseSchema>;
+/**
+ * Response Forge receives from POST /api/forge/kits/{slug}/download.
+ * Carries the presigned download URL plus provenance used by installed-kit
+ * metadata / update detection (Bridge 5).
+ */
+export declare const forgeDownloadResponseSchema: z.ZodObject<{
+    downloadUrl: z.ZodString;
+    marketKitId: z.ZodOptional<z.ZodString>;
+    marketSlug: z.ZodOptional<z.ZodString>;
+    version: z.ZodOptional<z.ZodString>;
+    sha256: z.ZodOptional<z.ZodString>;
+    packageSizeBytes: z.ZodOptional<z.ZodNumber>;
+    publishedAt: z.ZodOptional<z.ZodString>;
+    sourceUrl: z.ZodOptional<z.ZodString>;
+    fileName: z.ZodOptional<z.ZodString>;
+    expiresIn: z.ZodOptional<z.ZodNumber>;
+}, "strip", z.ZodTypeAny, {
+    downloadUrl: string;
+    fileName?: string | undefined;
+    version?: string | undefined;
+    marketKitId?: string | undefined;
+    marketSlug?: string | undefined;
+    sha256?: string | undefined;
+    packageSizeBytes?: number | undefined;
+    publishedAt?: string | undefined;
+    sourceUrl?: string | undefined;
+    expiresIn?: number | undefined;
+}, {
+    downloadUrl: string;
+    fileName?: string | undefined;
+    version?: string | undefined;
+    marketKitId?: string | undefined;
+    marketSlug?: string | undefined;
+    sha256?: string | undefined;
+    packageSizeBytes?: number | undefined;
+    publishedAt?: string | undefined;
+    sourceUrl?: string | undefined;
+    expiresIn?: number | undefined;
+}>;
+export type ForgeDownloadResponse = z.infer<typeof forgeDownloadResponseSchema>;
 /** Routes Forge calls on the Market web app (Seam A). */
 export declare const forgeMarketRoutes: {
     readonly download: (slug: string) => string;

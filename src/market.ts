@@ -35,6 +35,10 @@ export type ValidationStatus = z.infer<typeof validationStatusSchema>;
 export const reviewStatusSchema = z.enum(["pending", "approved", "rejected"]);
 export type ReviewStatus = z.infer<typeof reviewStatusSchema>;
 
+/** Whether a submission registers a brand-new kit or a new version of an existing one. */
+export const submissionTypeSchema = z.enum(["new_kit", "version_update"]);
+export type SubmissionType = z.infer<typeof submissionTypeSchema>;
+
 export const listingDraftSchema = z.object({
   name: z.string(),
   summary: z.string(),
@@ -53,7 +57,11 @@ export const forgeUploadBackendRequestSchema = z.object({
   listingDraft: listingDraftSchema,
   submittedByUserId: z.string().min(1),
   submittedByEmail: z.string().min(1),
-  publisherSnapshot: publisherSnapshotSchema.optional()
+  publisherSnapshot: publisherSnapshotSchema.optional(),
+  /** new_kit (default) or version_update of an existing owned kit. */
+  submissionType: submissionTypeSchema.optional(),
+  /** For version_update: the kitId being updated. Ownership is enforced server-side. */
+  targetKitId: z.string().min(1).optional()
 });
 export type ForgeUploadBackendRequest = z.infer<typeof forgeUploadBackendRequestSchema>;
 
@@ -66,6 +74,25 @@ export const forgeUploadUrlResponseSchema = z.object({
   headers: z.record(z.string())
 });
 export type ForgeUploadUrlResponse = z.infer<typeof forgeUploadUrlResponseSchema>;
+
+/**
+ * Response Forge receives from POST /api/forge/kits/{slug}/download.
+ * Carries the presigned download URL plus provenance used by installed-kit
+ * metadata / update detection (Bridge 5).
+ */
+export const forgeDownloadResponseSchema = z.object({
+  downloadUrl: z.string().url(),
+  marketKitId: z.string().optional(),
+  marketSlug: z.string().optional(),
+  version: z.string().optional(),
+  sha256: z.string().optional(),
+  packageSizeBytes: z.number().optional(),
+  publishedAt: z.string().optional(),
+  sourceUrl: z.string().optional(),
+  fileName: z.string().optional(),
+  expiresIn: z.number().optional()
+});
+export type ForgeDownloadResponse = z.infer<typeof forgeDownloadResponseSchema>;
 
 /** Routes Forge calls on the Market web app (Seam A). */
 export const forgeMarketRoutes = {
