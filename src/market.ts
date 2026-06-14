@@ -94,9 +94,50 @@ export const forgeDownloadResponseSchema = z.object({
 });
 export type ForgeDownloadResponse = z.infer<typeof forgeDownloadResponseSchema>;
 
+/** A published kit version's public metadata (from the catalog detail). */
+export const publicKitVersionSchema = z.object({
+  version: z.string(),
+  summary: z.string().nullable().optional(),
+  schemaVersion: z.string().nullable().optional(),
+  packageSizeBytes: z.number().nullable().optional(),
+  sha256: z.string().nullable().optional(),
+  publishedAt: z.string().nullable().optional()
+});
+export type PublicKitVersion = z.infer<typeof publicKitVersionSchema>;
+
+/**
+ * Public kit detail (inside an `{ item }` envelope) returned by the Market
+ * backend GET /kits/{slug} and proxied to Forge via the kit-detail route.
+ * Lenient (passthrough): the backend returns more fields than consumers read;
+ * `currentVersion`/`latestVersion` drive Bridge 5 update detection.
+ */
+export const publicKitDetailSchema = z
+  .object({
+    kitId: z.string(),
+    slug: z.string(),
+    name: z.string(),
+    summary: z.string(),
+    description: z.string().nullable().optional(),
+    categories: z.array(z.string()).optional(),
+    tags: z.array(z.string()).optional(),
+    currentVersion: z.string().nullable(),
+    latestVersion: publicKitVersionSchema.nullable(),
+    versions: z.array(publicKitVersionSchema).optional(),
+    publishedAt: z.string().nullable().optional(),
+    updatedAt: z.string().nullable().optional()
+  })
+  .passthrough();
+export type PublicKitDetail = z.infer<typeof publicKitDetailSchema>;
+
+/** Envelope for the kit-detail response: `{ item: PublicKitDetail }`. */
+export const publicKitDetailResponseSchema = z.object({ item: publicKitDetailSchema });
+export type PublicKitDetailResponse = z.infer<typeof publicKitDetailResponseSchema>;
+
 /** Routes Forge calls on the Market web app (Seam A). */
 export const forgeMarketRoutes = {
   download: (slug: string) => `/api/forge/kits/${encodeURIComponent(slug)}/download`,
+  /** Public (no-auth) kit detail proxy for update checks — { item: PublicKitDetail }. */
+  kitDetail: (slug: string) => `/api/forge/kits/${encodeURIComponent(slug)}`,
   submissionUploadUrl: () => "/api/forge/submissions/upload-url",
   submissionValidate: (submissionId: string) =>
     `/api/forge/submissions/${encodeURIComponent(submissionId)}/validate`,

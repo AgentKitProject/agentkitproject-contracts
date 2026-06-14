@@ -1,4 +1,4 @@
-# @agentkitproject/contracts
+# @agentkitforge/contracts
 
 Shared cross-service contracts for the AgentKitProject ecosystem.
 
@@ -24,10 +24,10 @@ is defined **here first**, then consumed by both sides of the seam:
 2. Providers and consumers both add a contract test against this package.
 3. Changing a published contract is a breaking change: bump the version and deploy both sides together.
 
-TypeScript consumers install via git dependency until npm publishing is set up:
+TypeScript consumers install the published public npm package:
 
 ```json
-"@agentkitproject/contracts": "github:AgentKitProject/agentkitproject-contracts#v0.1.0"
+"@agentkitforge/contracts": "^0.2.0"
 ```
 
-Rust consumers assert request/response shapes against `fixtures/*.json`.
+Rust consumers (and any non-TS consumer) assert request/response shapes against `fixtures/*.json`.

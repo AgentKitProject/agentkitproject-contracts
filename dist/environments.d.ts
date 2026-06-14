@@ -1,22 +1,20 @@
 import { z } from "zod";
-/** Schema for environments.json — the ecosystem service manifest. */
+/**
+ * Schema for environments.json — the public service-domain manifest.
+ * API Gateway base URLs are environment-specific infrastructure and are NOT
+ * part of the published manifest; services read those from their own env.
+ */
 export declare const serviceManifestSchema: z.ZodObject<{
-    profileApi: z.ZodString;
-    marketBackendApi: z.ZodString;
     marketApp: z.ZodString;
     profileApp: z.ZodString;
     forgeSite: z.ZodString;
     projectSite: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    profileApi: string;
-    marketBackendApi: string;
     marketApp: string;
     profileApp: string;
     forgeSite: string;
     projectSite: string;
 }, {
-    profileApi: string;
-    marketBackendApi: string;
     marketApp: string;
     profileApp: string;
     forgeSite: string;

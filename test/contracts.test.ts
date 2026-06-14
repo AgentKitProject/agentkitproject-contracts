@@ -5,6 +5,7 @@ import {
   forgeMarketRoutes,
   forgeUploadBackendRequestSchema,
   profileRoutes,
+  publicKitDetailResponseSchema,
   publicPublisherProfileSchema,
   serviceManifestSchema
 } from "../dist/index.js";
@@ -16,6 +17,7 @@ describe("contracts", () => {
   it("fixtures satisfy their schemas", () => {
     publicPublisherProfileSchema.parse(fixture("public-publisher-profile.json"));
     forgeUploadBackendRequestSchema.parse(fixture("forge-upload-backend-request.json"));
+    publicKitDetailResponseSchema.parse(fixture("public-kit-detail.json"));
   });
 
   it("route builders match the canonical route table", () => {
@@ -24,6 +26,8 @@ describe("contracts", () => {
     assert.equal(profileRoutes.publicByUserId("u1"), "/profiles/u1");
     assert.equal(profileRoutes.publicByHandle("h1"), "/profiles/handle/h1");
     assert.equal(forgeMarketRoutes.download("my-kit"), "/api/forge/kits/my-kit/download");
+    assert.equal(forgeMarketRoutes.kitDetail("my-kit"), "/api/forge/kits/my-kit");
+    assert.equal(forgeMarketRoutes.kitDetail("my-kit"), routes.forgeMarket.kitDetail.replace("{slug}", "my-kit"));
     assert.equal(forgeMarketRoutes.submissionUploadUrl(), routes.forgeMarket.submissionUploadUrl);
     assert.equal(forgeMarketRoutes.submissionValidate("s1"), "/api/forge/submissions/s1/validate");
     assert.equal(forgeMarketRoutes.publisherProfile(), routes.forgeMarket.publisherProfile);

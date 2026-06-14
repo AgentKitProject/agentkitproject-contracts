@@ -1,8 +1,6 @@
 {
-  "$comment": "Canonical service base URLs per environment. Infra repos own these values; apps must read service URLs from here (or from env vars documented to match these) rather than hardcoding.",
+  "$comment": "Public service domains per environment. API Gateway base URLs are environment-specific infrastructure and are deliberately NOT published here — each service reads them from its own deploy outputs / env vars (e.g. PROFILE_API_BASE_URL, NEXT_PUBLIC_AGENTKITMARKET_API_BASE_URL).",
   "production": {
-    "profileApi": "https://glz766c120.execute-api.us-east-1.amazonaws.com/prod",
-    "marketBackendApi": "https://u8u5r1puai.execute-api.us-east-1.amazonaws.com/v0",
     "marketApp": "https://market.agentkitproject.com",
     "profileApp": "https://profile.agentkitproject.com",
     "forgeSite": "https://forge.agentkitproject.com",

@@ -190,9 +190,440 @@ export declare const forgeDownloadResponseSchema: z.ZodObject<{
     expiresIn?: number | undefined;
 }>;
 export type ForgeDownloadResponse = z.infer<typeof forgeDownloadResponseSchema>;
+/** A published kit version's public metadata (from the catalog detail). */
+export declare const publicKitVersionSchema: z.ZodObject<{
+    version: z.ZodString;
+    summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+    sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, "strip", z.ZodTypeAny, {
+    version: string;
+    summary?: string | null | undefined;
+    sha256?: string | null | undefined;
+    packageSizeBytes?: number | null | undefined;
+    publishedAt?: string | null | undefined;
+    schemaVersion?: string | null | undefined;
+}, {
+    version: string;
+    summary?: string | null | undefined;
+    sha256?: string | null | undefined;
+    packageSizeBytes?: number | null | undefined;
+    publishedAt?: string | null | undefined;
+    schemaVersion?: string | null | undefined;
+}>;
+export type PublicKitVersion = z.infer<typeof publicKitVersionSchema>;
+/**
+ * Public kit detail (inside an `{ item }` envelope) returned by the Market
+ * backend GET /kits/{slug} and proxied to Forge via the kit-detail route.
+ * Lenient (passthrough): the backend returns more fields than consumers read;
+ * `currentVersion`/`latestVersion` drive Bridge 5 update detection.
+ */
+export declare const publicKitDetailSchema: z.ZodObject<{
+    kitId: z.ZodString;
+    slug: z.ZodString;
+    name: z.ZodString;
+    summary: z.ZodString;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    categories: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    currentVersion: z.ZodNullable<z.ZodString>;
+    latestVersion: z.ZodNullable<z.ZodObject<{
+        version: z.ZodString;
+        summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }>>;
+    versions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        version: z.ZodString;
+        summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }>, "many">>;
+    publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    kitId: z.ZodString;
+    slug: z.ZodString;
+    name: z.ZodString;
+    summary: z.ZodString;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    categories: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    currentVersion: z.ZodNullable<z.ZodString>;
+    latestVersion: z.ZodNullable<z.ZodObject<{
+        version: z.ZodString;
+        summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }>>;
+    versions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        version: z.ZodString;
+        summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }>, "many">>;
+    publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    kitId: z.ZodString;
+    slug: z.ZodString;
+    name: z.ZodString;
+    summary: z.ZodString;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    categories: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    currentVersion: z.ZodNullable<z.ZodString>;
+    latestVersion: z.ZodNullable<z.ZodObject<{
+        version: z.ZodString;
+        summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }>>;
+    versions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        version: z.ZodString;
+        summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+        sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }, {
+        version: string;
+        summary?: string | null | undefined;
+        sha256?: string | null | undefined;
+        packageSizeBytes?: number | null | undefined;
+        publishedAt?: string | null | undefined;
+        schemaVersion?: string | null | undefined;
+    }>, "many">>;
+    publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, z.ZodTypeAny, "passthrough">>;
+export type PublicKitDetail = z.infer<typeof publicKitDetailSchema>;
+/** Envelope for the kit-detail response: `{ item: PublicKitDetail }`. */
+export declare const publicKitDetailResponseSchema: z.ZodObject<{
+    item: z.ZodObject<{
+        kitId: z.ZodString;
+        slug: z.ZodString;
+        name: z.ZodString;
+        summary: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        categories: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        currentVersion: z.ZodNullable<z.ZodString>;
+        latestVersion: z.ZodNullable<z.ZodObject<{
+            version: z.ZodString;
+            summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, "strip", z.ZodTypeAny, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }>>;
+        versions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            version: z.ZodString;
+            summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, "strip", z.ZodTypeAny, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }>, "many">>;
+        publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        updatedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        kitId: z.ZodString;
+        slug: z.ZodString;
+        name: z.ZodString;
+        summary: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        categories: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        currentVersion: z.ZodNullable<z.ZodString>;
+        latestVersion: z.ZodNullable<z.ZodObject<{
+            version: z.ZodString;
+            summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, "strip", z.ZodTypeAny, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }>>;
+        versions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            version: z.ZodString;
+            summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, "strip", z.ZodTypeAny, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }>, "many">>;
+        publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        updatedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        kitId: z.ZodString;
+        slug: z.ZodString;
+        name: z.ZodString;
+        summary: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        categories: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        currentVersion: z.ZodNullable<z.ZodString>;
+        latestVersion: z.ZodNullable<z.ZodObject<{
+            version: z.ZodString;
+            summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, "strip", z.ZodTypeAny, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }>>;
+        versions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            version: z.ZodString;
+            summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            schemaVersion: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            packageSizeBytes: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
+            sha256: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, "strip", z.ZodTypeAny, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }, {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }>, "many">>;
+        publishedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        updatedAt: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">>;
+}, "strip", z.ZodTypeAny, {
+    item: {
+        name: string;
+        summary: string;
+        kitId: string;
+        slug: string;
+        currentVersion: string | null;
+        latestVersion: {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        } | null;
+        description?: string | null | undefined;
+        categories?: string[] | undefined;
+        tags?: string[] | undefined;
+        publishedAt?: string | null | undefined;
+        versions?: {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }[] | undefined;
+        updatedAt?: string | null | undefined;
+    } & {
+        [k: string]: unknown;
+    };
+}, {
+    item: {
+        name: string;
+        summary: string;
+        kitId: string;
+        slug: string;
+        currentVersion: string | null;
+        latestVersion: {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        } | null;
+        description?: string | null | undefined;
+        categories?: string[] | undefined;
+        tags?: string[] | undefined;
+        publishedAt?: string | null | undefined;
+        versions?: {
+            version: string;
+            summary?: string | null | undefined;
+            sha256?: string | null | undefined;
+            packageSizeBytes?: number | null | undefined;
+            publishedAt?: string | null | undefined;
+            schemaVersion?: string | null | undefined;
+        }[] | undefined;
+        updatedAt?: string | null | undefined;
+    } & {
+        [k: string]: unknown;
+    };
+}>;
+export type PublicKitDetailResponse = z.infer<typeof publicKitDetailResponseSchema>;
 /** Routes Forge calls on the Market web app (Seam A). */
 export declare const forgeMarketRoutes: {
     readonly download: (slug: string) => string;
+    /** Public (no-auth) kit detail proxy for update checks — { item: PublicKitDetail }. */
+    readonly kitDetail: (slug: string) => string;
     readonly submissionUploadUrl: () => string;
     readonly submissionValidate: (submissionId: string) => string;
     readonly publisherProfile: () => string;
