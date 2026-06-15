@@ -52,6 +52,7 @@ export {
   acceptOrgInviteRequestSchema,
   transferKitRequestSchema,
   setKitVisibilityRequestSchema,
+  deleteOrgResponseSchema,
   forgeOrgRoutes,
   marketBackendOrgRoutes,
   type OrgType,
@@ -67,5 +68,6 @@ export {
   type RemoveOrgMemberRequest,
   type AcceptOrgInviteRequest,
   type TransferKitRequest,
-  type SetKitVisibilityRequest
+  type SetKitVisibilityRequest,
+  type DeleteOrgResponse
 } from "./orgs.js";

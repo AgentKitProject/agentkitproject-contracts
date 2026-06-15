@@ -51,6 +51,10 @@ describe("contracts", () => {
     assert.equal(forgeOrgRoutes.listMyOrgs(), routes.forgeOrgs.listMyOrgs);
     assert.equal(forgeOrgRoutes.createOrg(), routes.forgeOrgs.createOrg);
     assert.equal(
+      forgeOrgRoutes.deleteOrg("org1"),
+      routes.forgeOrgs.deleteOrg.replace("{orgId}", "org1")
+    );
+    assert.equal(
       forgeOrgRoutes.orgMembers("org1"),
       routes.forgeOrgs.orgMembers.replace("{orgId}", "org1")
     );
@@ -80,6 +84,10 @@ describe("contracts", () => {
       routes.marketBackendOrgs.adminListUserOrgs.replace("{userId}", "u1")
     );
     assert.equal(marketBackendOrgRoutes.adminCreateOrg(), routes.marketBackendOrgs.adminCreateOrg);
+    assert.equal(
+      marketBackendOrgRoutes.adminDeleteOrg("org1"),
+      routes.marketBackendOrgs.adminDeleteOrg.replace("{orgId}", "org1")
+    );
     assert.equal(
       marketBackendOrgRoutes.adminOrgMembers("org1"),
       routes.marketBackendOrgs.adminOrgMembers.replace("{orgId}", "org1")

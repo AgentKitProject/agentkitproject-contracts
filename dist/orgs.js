@@ -96,6 +96,11 @@ export const setKitVisibilityRequestSchema = z.object({
     kitId: z.string().min(1),
     visibility: kitVisibilitySchema
 });
+/** Response from a successful org deletion. */
+export const deleteOrgResponseSchema = z.object({
+    ok: z.literal(true),
+    orgId: z.string().min(1)
+});
 // ---------------------------------------------------------------------------
 // Route builders (Seam A — Forge ↔ market-app, Bearer auth)
 // ---------------------------------------------------------------------------
@@ -116,6 +121,8 @@ export const forgeOrgRoutes = {
     myOrgInvites: () => "/api/forge/orgs/invites",
     /** POST /api/forge/orgs/{orgId}/invites/accept */
     acceptOrgInvite: (orgId) => `/api/forge/orgs/${encodeURIComponent(orgId)}/invites/accept`,
+    /** DELETE /api/forge/orgs/{orgId} — delete a team org the user owns/admins. */
+    deleteOrg: (orgId) => `/api/forge/orgs/${encodeURIComponent(orgId)}`,
     /** POST /api/forge/kits/{kitId}/transfer */
     transferKit: (kitId) => `/api/forge/kits/${encodeURIComponent(kitId)}/transfer`,
     /** POST /api/forge/kits/{kitId}/visibility */
@@ -133,6 +140,8 @@ export const marketBackendOrgRoutes = {
     adminListUserOrgs: (userId) => `/admin/users/${encodeURIComponent(userId)}/orgs`,
     /** POST /admin/orgs */
     adminCreateOrg: () => "/admin/orgs",
+    /** DELETE /admin/orgs/{orgId} */
+    adminDeleteOrg: (orgId) => `/admin/orgs/${encodeURIComponent(orgId)}`,
     /** GET/POST /admin/orgs/{orgId}/members */
     adminOrgMembers: (orgId) => `/admin/orgs/${encodeURIComponent(orgId)}/members`,
     /** PATCH/DELETE /admin/orgs/{orgId}/members/{userId} */

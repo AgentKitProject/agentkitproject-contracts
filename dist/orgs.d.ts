@@ -201,6 +201,18 @@ export declare const setKitVisibilityRequestSchema: z.ZodObject<{
     visibility: "public" | "private";
 }>;
 export type SetKitVisibilityRequest = z.infer<typeof setKitVisibilityRequestSchema>;
+/** Response from a successful org deletion. */
+export declare const deleteOrgResponseSchema: z.ZodObject<{
+    ok: z.ZodLiteral<true>;
+    orgId: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    orgId: string;
+    ok: true;
+}, {
+    orgId: string;
+    ok: true;
+}>;
+export type DeleteOrgResponse = z.infer<typeof deleteOrgResponseSchema>;
 /**
  * Org-related routes Forge calls on the Market web app (Seam A).
  * Extend forgeMarketRoutes in market.ts with these entries.
@@ -218,6 +230,8 @@ export declare const forgeOrgRoutes: {
     readonly myOrgInvites: () => string;
     /** POST /api/forge/orgs/{orgId}/invites/accept */
     readonly acceptOrgInvite: (orgId: string) => string;
+    /** DELETE /api/forge/orgs/{orgId} — delete a team org the user owns/admins. */
+    readonly deleteOrg: (orgId: string) => string;
     /** POST /api/forge/kits/{kitId}/transfer */
     readonly transferKit: (kitId: string) => string;
     /** POST /api/forge/kits/{kitId}/visibility */
@@ -232,6 +246,8 @@ export declare const marketBackendOrgRoutes: {
     readonly adminListUserOrgs: (userId: string) => string;
     /** POST /admin/orgs */
     readonly adminCreateOrg: () => string;
+    /** DELETE /admin/orgs/{orgId} */
+    readonly adminDeleteOrg: (orgId: string) => string;
     /** GET/POST /admin/orgs/{orgId}/members */
     readonly adminOrgMembers: (orgId: string) => string;
     /** PATCH/DELETE /admin/orgs/{orgId}/members/{userId} */
