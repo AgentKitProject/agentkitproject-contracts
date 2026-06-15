@@ -61,7 +61,12 @@ export const forgeUploadBackendRequestSchema = z.object({
   /** new_kit (default) or version_update of an existing owned kit. */
   submissionType: submissionTypeSchema.optional(),
   /** For version_update: the kitId being updated. Ownership is enforced server-side. */
-  targetKitId: z.string().min(1).optional()
+  targetKitId: z.string().min(1).optional(),
+  /**
+   * Organization that owns this kit.  Optional for now (personal kits have no ownerOrgId).
+   * Populated by Forge when submitting on behalf of an org (Market Phase 2 orgs slice).
+   */
+  ownerOrgId: z.string().min(1).optional()
 });
 export type ForgeUploadBackendRequest = z.infer<typeof forgeUploadBackendRequestSchema>;
 
@@ -110,6 +115,11 @@ export type PublicKitVersion = z.infer<typeof publicKitVersionSchema>;
  * backend GET /kits/{slug} and proxied to Forge via the kit-detail route.
  * Lenient (passthrough): the backend returns more fields than consumers read;
  * `currentVersion`/`latestVersion` drive Bridge 5 update detection.
+ *
+ * TODO (Market Phase 2): the `publisher` field will migrate from a free-form
+ * PublisherSnapshot projection to `PublicOrganizationSchema` once org-owned kits
+ * ship.  Do NOT add a typed `publisher` field here until that migration is ready —
+ * passthrough keeps it readable without breaking existing consumers.
  */
 export const publicKitDetailSchema = z
   .object({

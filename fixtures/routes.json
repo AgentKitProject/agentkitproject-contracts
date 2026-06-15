@@ -11,5 +11,25 @@
     "submissionUploadUrl": "/api/forge/submissions/upload-url",
     "submissionValidate": "/api/forge/submissions/{submissionId}/validate",
     "publisherProfile": "/api/forge/publisher-profile"
+  },
+  "forgeOrgs": {
+    "listMyOrgs": "/api/forge/orgs",
+    "createOrg": "/api/forge/orgs",
+    "orgMembers": "/api/forge/orgs/{orgId}/members",
+    "orgMember": "/api/forge/orgs/{orgId}/members/{userId}",
+    "myOrgInvites": "/api/forge/orgs/invites",
+    "acceptOrgInvite": "/api/forge/orgs/{orgId}/invites/accept",
+    "transferKit": "/api/forge/kits/{kitId}/transfer",
+    "setKitVisibility": "/api/forge/kits/{kitId}/visibility"
+  },
+  "marketBackendOrgs": {
+    "adminListUserOrgs": "/admin/users/{userId}/orgs",
+    "adminCreateOrg": "/admin/orgs",
+    "adminOrgMembers": "/admin/orgs/{orgId}/members",
+    "adminOrgMember": "/admin/orgs/{orgId}/members/{userId}",
+    "adminListUserInvites": "/admin/users/{userId}/invites",
+    "adminAcceptInvite": "/admin/orgs/{orgId}/invites/{userId}/accept",
+    "adminTransferKit": "/admin/kits/{kitId}/transfer",
+    "adminSetKitVisibility": "/admin/kits/{kitId}/visibility"
   }
 }
