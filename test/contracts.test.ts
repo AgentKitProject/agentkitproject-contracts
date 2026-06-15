@@ -6,6 +6,13 @@ import {
   forgeOrgRoutes,
   forgeUploadBackendRequestSchema,
   marketBackendOrgRoutes,
+  marketBackendPricingRoutes,
+  forgePricingRoutes,
+  entitlementSchema,
+  setKitPricingRequestSchema,
+  grantEntitlementRequestSchema,
+  kitPricingMetadataSchema,
+  DEFAULT_KIT_LICENSE_VERSION,
   organizationSchema,
   orgMembershipSchema,
   profileRoutes,
@@ -118,6 +125,65 @@ describe("contracts", () => {
     const base = fixture("forge-upload-backend-request.json");
     forgeUploadBackendRequestSchema.parse({ ...base, ownerOrgId: "org_01HXYZ" });
     forgeUploadBackendRequestSchema.parse(base); // still valid without ownerOrgId
+  });
+
+  it("entitlement fixture satisfies its schema", () => {
+    entitlementSchema.parse(fixture("entitlement.json"));
+  });
+
+  it("kit pricing metadata defaults to free/USD/default-license", () => {
+    const parsed = kitPricingMetadataSchema.parse({});
+    assert.equal(parsed.pricing, "free");
+    assert.equal(parsed.currency, "USD");
+    assert.equal(parsed.licenseType, "default");
+  });
+
+  it("set-pricing and grant requests parse", () => {
+    setKitPricingRequestSchema.parse({
+      actorUserId: "u1",
+      pricing: "paid",
+      priceModel: "subscription",
+      priceCents: 999,
+      interval: "month"
+    });
+    grantEntitlementRequestSchema.parse({
+      userId: "u1",
+      source: "admin_grant",
+      licenseVersion: DEFAULT_KIT_LICENSE_VERSION,
+      licenseAcceptedAt: "2026-06-15T00:00:00.000Z",
+      licenseTextSnapshot: "..."
+    });
+  });
+
+  it("marketBackendPricingRoutes produce expected paths", () => {
+    const routes = fixture("routes.json");
+    assert.equal(
+      marketBackendPricingRoutes.adminSetKitPricing("kit1"),
+      routes.marketBackendPricing.adminSetKitPricing.replace("{kitId}", "kit1")
+    );
+    assert.equal(
+      marketBackendPricingRoutes.adminListUserEntitlements("u1"),
+      routes.marketBackendPricing.adminListUserEntitlements.replace("{userId}", "u1")
+    );
+    assert.equal(
+      marketBackendPricingRoutes.adminGetEntitlement("kit1", "u1"),
+      routes.marketBackendPricing.adminGetEntitlement
+        .replace("{kitId}", "kit1")
+        .replace("{userId}", "u1")
+    );
+    assert.equal(
+      marketBackendPricingRoutes.adminGrantEntitlement("kit1"),
+      routes.marketBackendPricing.adminGrantEntitlement.replace("{kitId}", "kit1")
+    );
+    assert.equal(
+      marketBackendPricingRoutes.adminLicensedPackage("kit1"),
+      routes.marketBackendPricing.adminLicensedPackage.replace("{kitId}", "kit1")
+    );
+    assert.equal(forgePricingRoutes.myEntitlements(), routes.forgePricing.myEntitlements);
+    assert.equal(
+      forgePricingRoutes.licensedPackage("my-kit"),
+      routes.forgePricing.licensedPackage.replace("{slug}", "my-kit")
+    );
   });
 
   it("environments.json satisfies the service manifest schema", () => {

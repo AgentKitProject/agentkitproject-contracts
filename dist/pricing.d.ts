@@ -1,0 +1,319 @@
+import { z } from "zod";
+/**
+ * AgentKitMarket Tier-2 paid/licensed-kit contracts (Market Phase 2).
+ *
+ * Seam B (market-app ↔ agentkitmarket-infra backend): admin-key authenticated
+ * routes for setting kit pricing/license, granting/checking entitlements, and
+ * fetching the per-buyer watermarked package.
+ *
+ * Phase A (this slice): no payment provider. Entitlements are created by
+ * admin/free grants or manual testing; Stripe webhooks call the same grant
+ * route in Phase B. Core stays payment-provider-agnostic.
+ */
+export declare const kitPricingSchema: z.ZodEnum<["free", "paid"]>;
+export type KitPricing = z.infer<typeof kitPricingSchema>;
+export declare const priceModelSchema: z.ZodEnum<["one_time", "subscription"]>;
+export type PriceModel = z.infer<typeof priceModelSchema>;
+export declare const priceIntervalSchema: z.ZodEnum<["month", "year"]>;
+export type PriceInterval = z.infer<typeof priceIntervalSchema>;
+export declare const kitCurrencySchema: z.ZodEnum<["USD"]>;
+export type KitCurrency = z.infer<typeof kitCurrencySchema>;
+export declare const licenseTypeSchema: z.ZodEnum<["default", "custom"]>;
+export type LicenseType = z.infer<typeof licenseTypeSchema>;
+export declare const entitlementStatusSchema: z.ZodEnum<["active", "revoked", "expired"]>;
+export type EntitlementStatus = z.infer<typeof entitlementStatusSchema>;
+export declare const entitlementSourceSchema: z.ZodEnum<["purchase", "admin_grant", "free"]>;
+export type EntitlementSource = z.infer<typeof entitlementSourceSchema>;
+/** The default platform EULA version id applied when licenseType === 'default'. */
+export declare const DEFAULT_KIT_LICENSE_VERSION: "default-v1";
+/** Pricing + license metadata carried on a kit. All optional/defaulted (free-safe). */
+export declare const kitPricingMetadataSchema: z.ZodObject<{
+    pricing: z.ZodDefault<z.ZodEnum<["free", "paid"]>>;
+    priceModel: z.ZodOptional<z.ZodEnum<["one_time", "subscription"]>>;
+    priceCents: z.ZodOptional<z.ZodNumber>;
+    currency: z.ZodDefault<z.ZodEnum<["USD"]>>;
+    interval: z.ZodOptional<z.ZodEnum<["month", "year"]>>;
+    /** Paid kits default false (online-only); free kits are treated as downloadable. */
+    downloadable: z.ZodOptional<z.ZodBoolean>;
+    licenseType: z.ZodDefault<z.ZodEnum<["default", "custom"]>>;
+    licenseText: z.ZodOptional<z.ZodString>;
+    licenseVersion: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    pricing: "free" | "paid";
+    currency: "USD";
+    licenseType: "custom" | "default";
+    priceModel?: "one_time" | "subscription" | undefined;
+    priceCents?: number | undefined;
+    interval?: "month" | "year" | undefined;
+    downloadable?: boolean | undefined;
+    licenseText?: string | undefined;
+    licenseVersion?: string | undefined;
+}, {
+    pricing?: "free" | "paid" | undefined;
+    priceModel?: "one_time" | "subscription" | undefined;
+    priceCents?: number | undefined;
+    currency?: "USD" | undefined;
+    interval?: "month" | "year" | undefined;
+    downloadable?: boolean | undefined;
+    licenseType?: "custom" | "default" | undefined;
+    licenseText?: string | undefined;
+    licenseVersion?: string | undefined;
+}>;
+export type KitPricingMetadata = z.infer<typeof kitPricingMetadataSchema>;
+export declare const entitlementSchema: z.ZodObject<{
+    entitlementId: z.ZodString;
+    kitId: z.ZodString;
+    userId: z.ZodString;
+    status: z.ZodEnum<["active", "revoked", "expired"]>;
+    source: z.ZodEnum<["purchase", "admin_grant", "free"]>;
+    licenseVersion: z.ZodString;
+    licenseAcceptedAt: z.ZodString;
+    licenseTextSnapshot: z.ZodString;
+    grantedAt: z.ZodString;
+    expiresAt: z.ZodOptional<z.ZodString>;
+    stripeSubscriptionId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, "strip", z.ZodTypeAny, {
+    status: "active" | "revoked" | "expired";
+    userId: string;
+    kitId: string;
+    licenseVersion: string;
+    entitlementId: string;
+    source: "free" | "purchase" | "admin_grant";
+    licenseAcceptedAt: string;
+    licenseTextSnapshot: string;
+    grantedAt: string;
+    expiresAt?: string | undefined;
+    stripeSubscriptionId?: string | null | undefined;
+}, {
+    status: "active" | "revoked" | "expired";
+    userId: string;
+    kitId: string;
+    licenseVersion: string;
+    entitlementId: string;
+    source: "free" | "purchase" | "admin_grant";
+    licenseAcceptedAt: string;
+    licenseTextSnapshot: string;
+    grantedAt: string;
+    expiresAt?: string | undefined;
+    stripeSubscriptionId?: string | null | undefined;
+}>;
+export type Entitlement = z.infer<typeof entitlementSchema>;
+/**
+ * POST /admin/kits/{kitId}/pricing. actorUserId must be the kit owner or an
+ * admin/owner of the kit's owning org (role-gated server-side).
+ * Validation: paid requires priceCents>0 and priceModel; subscription requires interval.
+ */
+export declare const setKitPricingRequestSchema: z.ZodObject<{
+    actorUserId: z.ZodString;
+    pricing: z.ZodEnum<["free", "paid"]>;
+    priceModel: z.ZodOptional<z.ZodEnum<["one_time", "subscription"]>>;
+    priceCents: z.ZodOptional<z.ZodNumber>;
+    currency: z.ZodOptional<z.ZodEnum<["USD"]>>;
+    interval: z.ZodOptional<z.ZodEnum<["month", "year"]>>;
+    downloadable: z.ZodOptional<z.ZodBoolean>;
+    licenseType: z.ZodOptional<z.ZodEnum<["default", "custom"]>>;
+    licenseText: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    pricing: "free" | "paid";
+    actorUserId: string;
+    priceModel?: "one_time" | "subscription" | undefined;
+    priceCents?: number | undefined;
+    currency?: "USD" | undefined;
+    interval?: "month" | "year" | undefined;
+    downloadable?: boolean | undefined;
+    licenseType?: "custom" | "default" | undefined;
+    licenseText?: string | undefined;
+}, {
+    pricing: "free" | "paid";
+    actorUserId: string;
+    priceModel?: "one_time" | "subscription" | undefined;
+    priceCents?: number | undefined;
+    currency?: "USD" | undefined;
+    interval?: "month" | "year" | undefined;
+    downloadable?: boolean | undefined;
+    licenseType?: "custom" | "default" | undefined;
+    licenseText?: string | undefined;
+}>;
+export type SetKitPricingRequest = z.infer<typeof setKitPricingRequestSchema>;
+/** POST /admin/kits/{kitId}/entitlements — grant. Idempotent on (userId,kitId). */
+export declare const grantEntitlementRequestSchema: z.ZodObject<{
+    userId: z.ZodString;
+    source: z.ZodEnum<["purchase", "admin_grant", "free"]>;
+    licenseVersion: z.ZodString;
+    licenseAcceptedAt: z.ZodString;
+    licenseTextSnapshot: z.ZodString;
+    expiresAt: z.ZodOptional<z.ZodString>;
+    stripeSubscriptionId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, "strip", z.ZodTypeAny, {
+    userId: string;
+    licenseVersion: string;
+    source: "free" | "purchase" | "admin_grant";
+    licenseAcceptedAt: string;
+    licenseTextSnapshot: string;
+    expiresAt?: string | undefined;
+    stripeSubscriptionId?: string | null | undefined;
+}, {
+    userId: string;
+    licenseVersion: string;
+    source: "free" | "purchase" | "admin_grant";
+    licenseAcceptedAt: string;
+    licenseTextSnapshot: string;
+    expiresAt?: string | undefined;
+    stripeSubscriptionId?: string | null | undefined;
+}>;
+export type GrantEntitlementRequest = z.infer<typeof grantEntitlementRequestSchema>;
+/** POST /admin/kits/{kitId}/licensed-package — entitlement-gated watermarked fetch. */
+export declare const licensedPackageRequestSchema: z.ZodObject<{
+    userId: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    userId: string;
+}, {
+    userId: string;
+}>;
+export type LicensedPackageRequest = z.infer<typeof licensedPackageRequestSchema>;
+/** Response from the licensed-package route: base64 watermarked bytes + metadata. */
+export declare const licensedPackageResponseSchema: z.ZodObject<{
+    kitId: z.ZodString;
+    userId: z.ZodString;
+    entitlementId: z.ZodString;
+    fileName: z.ZodString;
+    contentBase64: z.ZodString;
+    sha256: z.ZodString;
+    licenseVersion: z.ZodString;
+    watermark: z.ZodObject<{
+        entitlementId: z.ZodString;
+        userId: z.ZodString;
+        kitId: z.ZodString;
+        grantedAt: z.ZodString;
+        hash: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        userId: string;
+        kitId: string;
+        entitlementId: string;
+        grantedAt: string;
+        hash: string;
+    }, {
+        userId: string;
+        kitId: string;
+        entitlementId: string;
+        grantedAt: string;
+        hash: string;
+    }>;
+}, "strip", z.ZodTypeAny, {
+    userId: string;
+    fileName: string;
+    sha256: string;
+    kitId: string;
+    licenseVersion: string;
+    entitlementId: string;
+    contentBase64: string;
+    watermark: {
+        userId: string;
+        kitId: string;
+        entitlementId: string;
+        grantedAt: string;
+        hash: string;
+    };
+}, {
+    userId: string;
+    fileName: string;
+    sha256: string;
+    kitId: string;
+    licenseVersion: string;
+    entitlementId: string;
+    contentBase64: string;
+    watermark: {
+        userId: string;
+        kitId: string;
+        entitlementId: string;
+        grantedAt: string;
+        hash: string;
+    };
+}>;
+export type LicensedPackageResponse = z.infer<typeof licensedPackageResponseSchema>;
+export declare const listEntitlementsResponseSchema: z.ZodObject<{
+    items: z.ZodArray<z.ZodObject<{
+        entitlementId: z.ZodString;
+        kitId: z.ZodString;
+        userId: z.ZodString;
+        status: z.ZodEnum<["active", "revoked", "expired"]>;
+        source: z.ZodEnum<["purchase", "admin_grant", "free"]>;
+        licenseVersion: z.ZodString;
+        licenseAcceptedAt: z.ZodString;
+        licenseTextSnapshot: z.ZodString;
+        grantedAt: z.ZodString;
+        expiresAt: z.ZodOptional<z.ZodString>;
+        stripeSubscriptionId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        status: "active" | "revoked" | "expired";
+        userId: string;
+        kitId: string;
+        licenseVersion: string;
+        entitlementId: string;
+        source: "free" | "purchase" | "admin_grant";
+        licenseAcceptedAt: string;
+        licenseTextSnapshot: string;
+        grantedAt: string;
+        expiresAt?: string | undefined;
+        stripeSubscriptionId?: string | null | undefined;
+    }, {
+        status: "active" | "revoked" | "expired";
+        userId: string;
+        kitId: string;
+        licenseVersion: string;
+        entitlementId: string;
+        source: "free" | "purchase" | "admin_grant";
+        licenseAcceptedAt: string;
+        licenseTextSnapshot: string;
+        grantedAt: string;
+        expiresAt?: string | undefined;
+        stripeSubscriptionId?: string | null | undefined;
+    }>, "many">;
+}, "strip", z.ZodTypeAny, {
+    items: {
+        status: "active" | "revoked" | "expired";
+        userId: string;
+        kitId: string;
+        licenseVersion: string;
+        entitlementId: string;
+        source: "free" | "purchase" | "admin_grant";
+        licenseAcceptedAt: string;
+        licenseTextSnapshot: string;
+        grantedAt: string;
+        expiresAt?: string | undefined;
+        stripeSubscriptionId?: string | null | undefined;
+    }[];
+}, {
+    items: {
+        status: "active" | "revoked" | "expired";
+        userId: string;
+        kitId: string;
+        licenseVersion: string;
+        entitlementId: string;
+        source: "free" | "purchase" | "admin_grant";
+        licenseAcceptedAt: string;
+        licenseTextSnapshot: string;
+        grantedAt: string;
+        expiresAt?: string | undefined;
+        stripeSubscriptionId?: string | null | undefined;
+    }[];
+}>;
+export type ListEntitlementsResponse = z.infer<typeof listEntitlementsResponseSchema>;
+export declare const marketBackendPricingRoutes: {
+    /** POST /admin/kits/{kitId}/pricing */
+    readonly adminSetKitPricing: (kitId: string) => string;
+    /** GET /admin/users/{userId}/entitlements */
+    readonly adminListUserEntitlements: (userId: string) => string;
+    /** GET /admin/kits/{kitId}/entitlements/{userId} */
+    readonly adminGetEntitlement: (kitId: string, userId: string) => string;
+    /** POST /admin/kits/{kitId}/entitlements */
+    readonly adminGrantEntitlement: (kitId: string) => string;
+    /** POST /admin/kits/{kitId}/licensed-package */
+    readonly adminLicensedPackage: (kitId: string) => string;
+};
+export declare const forgePricingRoutes: {
+    /** GET /api/forge/me/entitlements — list the authenticated user's entitlements. */
+    readonly myEntitlements: () => string;
+    /** POST /api/forge/kits/{slug}/licensed-package — entitlement-gated fetch. */
+    readonly licensedPackage: (slug: string) => string;
+};

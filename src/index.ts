@@ -71,3 +71,37 @@ export {
   type SetKitVisibilityRequest,
   type DeleteOrgResponse
 } from "./orgs.js";
+
+export {
+  kitPricingSchema,
+  priceModelSchema,
+  priceIntervalSchema,
+  kitCurrencySchema,
+  licenseTypeSchema,
+  entitlementStatusSchema,
+  entitlementSourceSchema,
+  kitPricingMetadataSchema,
+  entitlementSchema,
+  setKitPricingRequestSchema,
+  grantEntitlementRequestSchema,
+  licensedPackageRequestSchema,
+  licensedPackageResponseSchema,
+  listEntitlementsResponseSchema,
+  marketBackendPricingRoutes,
+  forgePricingRoutes,
+  DEFAULT_KIT_LICENSE_VERSION,
+  type KitPricing,
+  type PriceModel,
+  type PriceInterval,
+  type KitCurrency,
+  type LicenseType,
+  type EntitlementStatus,
+  type EntitlementSource,
+  type KitPricingMetadata,
+  type Entitlement,
+  type SetKitPricingRequest,
+  type GrantEntitlementRequest,
+  type LicensedPackageRequest,
+  type LicensedPackageResponse,
+  type ListEntitlementsResponse
+} from "./pricing.js";
