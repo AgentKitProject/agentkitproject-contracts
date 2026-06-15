@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.4.0...v0.5.0) (2026-06-15)
+
+
+### Features
+
+* **pricing:** add Tier-2 paid/licensed-kit contracts ([1271aff](https://github.com/AgentKitProject/agentkitproject-contracts/commit/1271aff6f8dbb8e2c766e664260538d104b2c863))
+
 ## [0.4.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.3.0...v0.4.0) (2026-06-15)
 
 
