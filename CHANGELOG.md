@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.3.0...v0.4.0) (2026-06-15)
+
+
+### Features
+
+* **orgs:** add delete-organization routes (DELETE /admin/orgs/{orgId}) ([4e6687c](https://github.com/AgentKitProject/agentkitproject-contracts/commit/4e6687ca7d7acb38250cbafb61b847c9d8e22f31))
+
 ## [0.3.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.2.0...v0.3.0) (2026-06-15)
 
 
