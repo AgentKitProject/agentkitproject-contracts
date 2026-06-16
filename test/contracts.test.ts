@@ -15,6 +15,12 @@ import {
   DEFAULT_KIT_LICENSE_VERSION,
   organizationSchema,
   orgMembershipSchema,
+  favoriteSchema,
+  addFavoriteRequestSchema,
+  listFavoritesResponseSchema,
+  marketBackendFavoritesRoutes,
+  forgeFavoritesRoutes,
+  browserFavoritesRoutes,
   profileRoutes,
   publicKitDetailResponseSchema,
   publicPublisherProfileSchema,
@@ -183,6 +189,42 @@ describe("contracts", () => {
     assert.equal(
       forgePricingRoutes.licensedPackage("my-kit"),
       routes.forgePricing.licensedPackage.replace("{slug}", "my-kit")
+    );
+  });
+
+  it("favorite fixture and request schemas validate", () => {
+    favoriteSchema.parse(fixture("favorite.json"));
+    addFavoriteRequestSchema.parse({ slug: "my-kit" });
+    addFavoriteRequestSchema.parse({ kitId: "kit1" });
+    assert.throws(() => addFavoriteRequestSchema.parse({}));
+    listFavoritesResponseSchema.parse({ items: [fixture("favorite.json")] });
+  });
+
+  it("favorites routes produce expected paths", () => {
+    const routes = fixture("routes.json");
+    assert.equal(
+      marketBackendFavoritesRoutes.adminListUserFavorites("u1"),
+      routes.marketBackendFavorites.adminListUserFavorites.replace("{userId}", "u1")
+    );
+    assert.equal(
+      marketBackendFavoritesRoutes.adminAddUserFavorite("u1"),
+      routes.marketBackendFavorites.adminAddUserFavorite.replace("{userId}", "u1")
+    );
+    assert.equal(
+      marketBackendFavoritesRoutes.adminRemoveUserFavorite("u1", "kit1"),
+      routes.marketBackendFavorites.adminRemoveUserFavorite
+        .replace("{userId}", "u1")
+        .replace("{kitId}", "kit1")
+    );
+    assert.equal(forgeFavoritesRoutes.favorites(), routes.forgeFavorites.favorites);
+    assert.equal(
+      forgeFavoritesRoutes.favorite("kit1"),
+      routes.forgeFavorites.favorite.replace("{kitId}", "kit1")
+    );
+    assert.equal(browserFavoritesRoutes.favorites(), routes.browserFavorites.favorites);
+    assert.equal(
+      browserFavoritesRoutes.favorite("kit1"),
+      routes.browserFavorites.favorite.replace("{kitId}", "kit1")
     );
   });
 

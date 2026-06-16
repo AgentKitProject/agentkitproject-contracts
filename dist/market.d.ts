@@ -25,14 +25,14 @@ export declare const listingDraftSchema: z.ZodObject<{
     categories: z.ZodArray<z.ZodString, "many">;
     tags: z.ZodArray<z.ZodString, "many">;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     summary: string;
+    name: string;
     description: string;
     categories: string[];
     tags: string[];
 }, {
-    name: string;
     summary: string;
+    name: string;
     description: string;
     categories: string[];
     tags: string[];
@@ -51,14 +51,14 @@ export declare const forgeUploadBackendRequestSchema: z.ZodObject<{
         categories: z.ZodArray<z.ZodString, "many">;
         tags: z.ZodArray<z.ZodString, "many">;
     }, "strip", z.ZodTypeAny, {
-        name: string;
         summary: string;
+        name: string;
         description: string;
         categories: string[];
         tags: string[];
     }, {
-        name: string;
         summary: string;
+        name: string;
         description: string;
         categories: string[];
         tags: string[];
@@ -95,8 +95,8 @@ export declare const forgeUploadBackendRequestSchema: z.ZodObject<{
     version: string;
     publisherId: string;
     listingDraft: {
-        name: string;
         summary: string;
+        name: string;
         description: string;
         categories: string[];
         tags: string[];
@@ -117,8 +117,8 @@ export declare const forgeUploadBackendRequestSchema: z.ZodObject<{
     version: string;
     publisherId: string;
     listingDraft: {
-        name: string;
         summary: string;
+        name: string;
         description: string;
         categories: string[];
         tags: string[];
@@ -569,10 +569,10 @@ export declare const publicKitDetailResponseSchema: z.ZodObject<{
     }, z.ZodTypeAny, "passthrough">>;
 }, "strip", z.ZodTypeAny, {
     item: {
-        name: string;
-        summary: string;
         kitId: string;
         slug: string;
+        summary: string;
+        name: string;
         currentVersion: string | null;
         latestVersion: {
             version: string;
@@ -600,10 +600,10 @@ export declare const publicKitDetailResponseSchema: z.ZodObject<{
     };
 }, {
     item: {
-        name: string;
-        summary: string;
         kitId: string;
         slug: string;
+        summary: string;
+        name: string;
         currentVersion: string | null;
         latestVersion: {
             version: string;

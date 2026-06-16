@@ -105,3 +105,17 @@ export {
   type LicensedPackageResponse,
   type ListEntitlementsResponse
 } from "./pricing.js";
+
+export {
+  favoriteSchema,
+  addFavoriteRequestSchema,
+  listFavoritesResponseSchema,
+  removeFavoriteResponseSchema,
+  marketBackendFavoritesRoutes,
+  forgeFavoritesRoutes,
+  browserFavoritesRoutes,
+  type Favorite,
+  type AddFavoriteRequest,
+  type ListFavoritesResponse,
+  type RemoveFavoriteResponse
+} from "./favorites.js";

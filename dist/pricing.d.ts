@@ -201,9 +201,9 @@ export declare const licensedPackageResponseSchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     userId: string;
+    kitId: string;
     fileName: string;
     sha256: string;
-    kitId: string;
     licenseVersion: string;
     entitlementId: string;
     contentBase64: string;
@@ -216,9 +216,9 @@ export declare const licensedPackageResponseSchema: z.ZodObject<{
     };
 }, {
     userId: string;
+    kitId: string;
     fileName: string;
     sha256: string;
-    kitId: string;
     licenseVersion: string;
     entitlementId: string;
     contentBase64: string;

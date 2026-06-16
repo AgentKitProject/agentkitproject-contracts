@@ -40,8 +40,8 @@ export declare const organizationSchema: z.ZodObject<{
     updatedAt: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     type: "personal" | "team";
-    displayName: string;
     slug: string;
+    displayName: string;
     updatedAt: string;
     orgId: string;
     ownerUserId: string;
@@ -52,8 +52,8 @@ export declare const organizationSchema: z.ZodObject<{
     workosOrganizationId?: string | null | undefined;
 }, {
     type: "personal" | "team";
-    displayName: string;
     slug: string;
+    displayName: string;
     updatedAt: string;
     orgId: string;
     ownerUserId: string;
@@ -73,15 +73,15 @@ export declare const publicOrganizationSchema: z.ZodObject<{
     avatarInitials: z.ZodOptional<z.ZodString>;
     verified: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    displayName: string;
     slug: string;
+    displayName: string;
     orgId: string;
     handle?: string | undefined;
     avatarInitials?: string | undefined;
     verified?: boolean | undefined;
 }, {
-    displayName: string;
     slug: string;
+    displayName: string;
     orgId: string;
     handle?: string | undefined;
     avatarInitials?: string | undefined;
@@ -144,12 +144,12 @@ export declare const createOrgRequestSchema: z.ZodObject<{
     handle: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     displayName: string;
-    handle?: string | undefined;
     slug?: string | undefined;
+    handle?: string | undefined;
 }, {
     displayName: string;
-    handle?: string | undefined;
     slug?: string | undefined;
+    handle?: string | undefined;
 }>;
 export type CreateOrgRequest = z.infer<typeof createOrgRequestSchema>;
 export declare const addOrgMemberRequestSchema: z.ZodObject<{
@@ -206,11 +206,11 @@ export declare const deleteOrgResponseSchema: z.ZodObject<{
     ok: z.ZodLiteral<true>;
     orgId: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    orgId: string;
     ok: true;
+    orgId: string;
 }, {
-    orgId: string;
     ok: true;
+    orgId: string;
 }>;
 export type DeleteOrgResponse = z.infer<typeof deleteOrgResponseSchema>;
 /**
