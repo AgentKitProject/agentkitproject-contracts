@@ -14,7 +14,7 @@ export declare const auditActorTypeSchema: z.ZodEnum<["user", "admin", "system"]
 export type AuditActorType = z.infer<typeof auditActorTypeSchema>;
 export declare const auditTargetTypeSchema: z.ZodEnum<["submission", "kit", "org", "membership", "entitlement", "favorite"]>;
 export type AuditTargetType = z.infer<typeof auditTargetTypeSchema>;
-export declare const auditActionSchema: z.ZodEnum<["submission.created", "submission.validated", "submission.approved", "submission.rejected", "submission.archived", "submission.canceled", "submission.published", "kit.published", "kit.hidden", "kit.unhidden", "kit.removed", "kit.pricing_set", "kit.visibility_set", "kit.transferred", "org.created", "org.member_added", "org.member_removed", "org.invite_accepted", "org.deleted", "entitlement.granted", "entitlement.revoked"]>;
+export declare const auditActionSchema: z.ZodEnum<["submission.created", "submission.validated", "submission.approved", "submission.rejected", "submission.archived", "submission.canceled", "submission.published", "kit.published", "kit.hidden", "kit.unhidden", "kit.removed", "kit.pricing_set", "kit.visibility_set", "kit.transferred", "org.created", "org.member_added", "org.member_removed", "org.invite_accepted", "org.deleted", "entitlement.granted", "entitlement.revoked", "entitlement.subscription_status_set"]>;
 export type AuditAction = z.infer<typeof auditActionSchema>;
 /** Small JSON record for context (e.g. {fromStatus,toStatus} or {priceCents}). */
 export declare const auditMetadataSchema: z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodBoolean, z.ZodNull]>>;
@@ -25,7 +25,7 @@ export declare const auditEventSchema: z.ZodObject<{
     actorUserId: z.ZodString;
     actorEmail: z.ZodOptional<z.ZodString>;
     actorType: z.ZodEnum<["user", "admin", "system"]>;
-    action: z.ZodEnum<["submission.created", "submission.validated", "submission.approved", "submission.rejected", "submission.archived", "submission.canceled", "submission.published", "kit.published", "kit.hidden", "kit.unhidden", "kit.removed", "kit.pricing_set", "kit.visibility_set", "kit.transferred", "org.created", "org.member_added", "org.member_removed", "org.invite_accepted", "org.deleted", "entitlement.granted", "entitlement.revoked"]>;
+    action: z.ZodEnum<["submission.created", "submission.validated", "submission.approved", "submission.rejected", "submission.archived", "submission.canceled", "submission.published", "kit.published", "kit.hidden", "kit.unhidden", "kit.removed", "kit.pricing_set", "kit.visibility_set", "kit.transferred", "org.created", "org.member_added", "org.member_removed", "org.invite_accepted", "org.deleted", "entitlement.granted", "entitlement.revoked", "entitlement.subscription_status_set"]>;
     targetType: z.ZodEnum<["submission", "kit", "org", "membership", "entitlement", "favorite"]>;
     targetId: z.ZodString;
     orgId: z.ZodOptional<z.ZodString>;
@@ -36,7 +36,7 @@ export declare const auditEventSchema: z.ZodObject<{
     timestamp: string;
     actorUserId: string;
     actorType: "user" | "admin" | "system";
-    action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked";
+    action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | "entitlement.subscription_status_set";
     targetType: "submission" | "kit" | "org" | "membership" | "entitlement" | "favorite";
     targetId: string;
     actorEmail?: string | undefined;
@@ -48,7 +48,7 @@ export declare const auditEventSchema: z.ZodObject<{
     timestamp: string;
     actorUserId: string;
     actorType: "user" | "admin" | "system";
-    action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked";
+    action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | "entitlement.subscription_status_set";
     targetType: "submission" | "kit" | "org" | "membership" | "entitlement" | "favorite";
     targetId: string;
     actorEmail?: string | undefined;
@@ -61,14 +61,14 @@ export declare const listAuditLogsQuerySchema: z.ZodObject<{
     actorUserId: z.ZodOptional<z.ZodString>;
     targetType: z.ZodOptional<z.ZodEnum<["submission", "kit", "org", "membership", "entitlement", "favorite"]>>;
     targetId: z.ZodOptional<z.ZodString>;
-    action: z.ZodOptional<z.ZodEnum<["submission.created", "submission.validated", "submission.approved", "submission.rejected", "submission.archived", "submission.canceled", "submission.published", "kit.published", "kit.hidden", "kit.unhidden", "kit.removed", "kit.pricing_set", "kit.visibility_set", "kit.transferred", "org.created", "org.member_added", "org.member_removed", "org.invite_accepted", "org.deleted", "entitlement.granted", "entitlement.revoked"]>>;
+    action: z.ZodOptional<z.ZodEnum<["submission.created", "submission.validated", "submission.approved", "submission.rejected", "submission.archived", "submission.canceled", "submission.published", "kit.published", "kit.hidden", "kit.unhidden", "kit.removed", "kit.pricing_set", "kit.visibility_set", "kit.transferred", "org.created", "org.member_added", "org.member_removed", "org.invite_accepted", "org.deleted", "entitlement.granted", "entitlement.revoked", "entitlement.subscription_status_set"]>>;
     since: z.ZodOptional<z.ZodString>;
     until: z.ZodOptional<z.ZodString>;
     limit: z.ZodOptional<z.ZodNumber>;
     nextToken: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     actorUserId?: string | undefined;
-    action?: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | undefined;
+    action?: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | "entitlement.subscription_status_set" | undefined;
     targetType?: "submission" | "kit" | "org" | "membership" | "entitlement" | "favorite" | undefined;
     targetId?: string | undefined;
     since?: string | undefined;
@@ -77,7 +77,7 @@ export declare const listAuditLogsQuerySchema: z.ZodObject<{
     nextToken?: string | undefined;
 }, {
     actorUserId?: string | undefined;
-    action?: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | undefined;
+    action?: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | "entitlement.subscription_status_set" | undefined;
     targetType?: "submission" | "kit" | "org" | "membership" | "entitlement" | "favorite" | undefined;
     targetId?: string | undefined;
     since?: string | undefined;
@@ -93,7 +93,7 @@ export declare const listAuditLogsResponseSchema: z.ZodObject<{
         actorUserId: z.ZodString;
         actorEmail: z.ZodOptional<z.ZodString>;
         actorType: z.ZodEnum<["user", "admin", "system"]>;
-        action: z.ZodEnum<["submission.created", "submission.validated", "submission.approved", "submission.rejected", "submission.archived", "submission.canceled", "submission.published", "kit.published", "kit.hidden", "kit.unhidden", "kit.removed", "kit.pricing_set", "kit.visibility_set", "kit.transferred", "org.created", "org.member_added", "org.member_removed", "org.invite_accepted", "org.deleted", "entitlement.granted", "entitlement.revoked"]>;
+        action: z.ZodEnum<["submission.created", "submission.validated", "submission.approved", "submission.rejected", "submission.archived", "submission.canceled", "submission.published", "kit.published", "kit.hidden", "kit.unhidden", "kit.removed", "kit.pricing_set", "kit.visibility_set", "kit.transferred", "org.created", "org.member_added", "org.member_removed", "org.invite_accepted", "org.deleted", "entitlement.granted", "entitlement.revoked", "entitlement.subscription_status_set"]>;
         targetType: z.ZodEnum<["submission", "kit", "org", "membership", "entitlement", "favorite"]>;
         targetId: z.ZodString;
         orgId: z.ZodOptional<z.ZodString>;
@@ -104,7 +104,7 @@ export declare const listAuditLogsResponseSchema: z.ZodObject<{
         timestamp: string;
         actorUserId: string;
         actorType: "user" | "admin" | "system";
-        action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked";
+        action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | "entitlement.subscription_status_set";
         targetType: "submission" | "kit" | "org" | "membership" | "entitlement" | "favorite";
         targetId: string;
         actorEmail?: string | undefined;
@@ -116,7 +116,7 @@ export declare const listAuditLogsResponseSchema: z.ZodObject<{
         timestamp: string;
         actorUserId: string;
         actorType: "user" | "admin" | "system";
-        action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked";
+        action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | "entitlement.subscription_status_set";
         targetType: "submission" | "kit" | "org" | "membership" | "entitlement" | "favorite";
         targetId: string;
         actorEmail?: string | undefined;
@@ -131,7 +131,7 @@ export declare const listAuditLogsResponseSchema: z.ZodObject<{
         timestamp: string;
         actorUserId: string;
         actorType: "user" | "admin" | "system";
-        action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked";
+        action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | "entitlement.subscription_status_set";
         targetType: "submission" | "kit" | "org" | "membership" | "entitlement" | "favorite";
         targetId: string;
         actorEmail?: string | undefined;
@@ -146,7 +146,7 @@ export declare const listAuditLogsResponseSchema: z.ZodObject<{
         timestamp: string;
         actorUserId: string;
         actorType: "user" | "admin" | "system";
-        action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked";
+        action: "submission.created" | "submission.validated" | "submission.approved" | "submission.rejected" | "submission.archived" | "submission.canceled" | "submission.published" | "kit.published" | "kit.hidden" | "kit.unhidden" | "kit.removed" | "kit.pricing_set" | "kit.visibility_set" | "kit.transferred" | "org.created" | "org.member_added" | "org.member_removed" | "org.invite_accepted" | "org.deleted" | "entitlement.granted" | "entitlement.revoked" | "entitlement.subscription_status_set";
         targetType: "submission" | "kit" | "org" | "membership" | "entitlement" | "favorite";
         targetId: string;
         actorEmail?: string | undefined;

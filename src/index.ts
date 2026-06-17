@@ -84,6 +84,7 @@ export {
   entitlementSchema,
   setKitPricingRequestSchema,
   grantEntitlementRequestSchema,
+  setEntitlementSubscriptionStatusRequestSchema,
   licensedPackageRequestSchema,
   licensedPackageResponseSchema,
   listEntitlementsResponseSchema,
@@ -101,6 +102,7 @@ export {
   type Entitlement,
   type SetKitPricingRequest,
   type GrantEntitlementRequest,
+  type SetEntitlementSubscriptionStatusRequest,
   type LicensedPackageRequest,
   type LicensedPackageResponse,
   type ListEntitlementsResponse

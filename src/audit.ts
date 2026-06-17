@@ -54,7 +54,8 @@ export const auditActionSchema = z.enum([
   "org.deleted",
   // entitlement lifecycle
   "entitlement.granted",
-  "entitlement.revoked"
+  "entitlement.revoked",
+  "entitlement.subscription_status_set"
 ]);
 export type AuditAction = z.infer<typeof auditActionSchema>;
 
