@@ -174,6 +174,23 @@ export declare const grantEntitlementRequestSchema: z.ZodObject<{
     stripeSubscriptionId?: string | null | undefined;
 }>;
 export type GrantEntitlementRequest = z.infer<typeof grantEntitlementRequestSchema>;
+/**
+ * POST /admin/entitlements/by-subscription/{stripeSubscriptionId}/status —
+ * subscription lifecycle. Driven by the Stripe webhook (subscription.updated /
+ * subscription.deleted): sets the status (and optional expiresAt) of every
+ * entitlement carrying the given Stripe subscription id. Idempotent.
+ */
+export declare const setEntitlementSubscriptionStatusRequestSchema: z.ZodObject<{
+    status: z.ZodEnum<["active", "revoked", "expired"]>;
+    expiresAt: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    status: "active" | "revoked" | "expired";
+    expiresAt?: string | undefined;
+}, {
+    status: "active" | "revoked" | "expired";
+    expiresAt?: string | undefined;
+}>;
+export type SetEntitlementSubscriptionStatusRequest = z.infer<typeof setEntitlementSubscriptionStatusRequestSchema>;
 /** POST /admin/kits/{kitId}/licensed-package — entitlement-gated watermarked fetch. */
 export declare const licensedPackageRequestSchema: z.ZodObject<{
     userId: z.ZodString;
@@ -320,6 +337,8 @@ export declare const marketBackendPricingRoutes: {
     readonly adminGetEntitlement: (kitId: string, userId: string) => string;
     /** POST /admin/kits/{kitId}/entitlements */
     readonly adminGrantEntitlement: (kitId: string) => string;
+    /** POST /admin/entitlements/by-subscription/{stripeSubscriptionId}/status */
+    readonly adminSetEntitlementSubscriptionStatus: (stripeSubscriptionId: string) => string;
     /** POST /admin/kits/{kitId}/licensed-package */
     readonly adminLicensedPackage: (kitId: string) => string;
 };

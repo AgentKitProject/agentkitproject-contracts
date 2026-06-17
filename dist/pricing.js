@@ -88,6 +88,16 @@ export const grantEntitlementRequestSchema = z.object({
     expiresAt: z.string().optional(),
     stripeSubscriptionId: z.string().nullable().optional()
 });
+/**
+ * POST /admin/entitlements/by-subscription/{stripeSubscriptionId}/status —
+ * subscription lifecycle. Driven by the Stripe webhook (subscription.updated /
+ * subscription.deleted): sets the status (and optional expiresAt) of every
+ * entitlement carrying the given Stripe subscription id. Idempotent.
+ */
+export const setEntitlementSubscriptionStatusRequestSchema = z.object({
+    status: entitlementStatusSchema,
+    expiresAt: z.string().optional()
+});
 /** POST /admin/kits/{kitId}/licensed-package — entitlement-gated watermarked fetch. */
 export const licensedPackageRequestSchema = z.object({
     userId: z.string().min(1)
@@ -124,6 +134,8 @@ export const marketBackendPricingRoutes = {
     adminGetEntitlement: (kitId, userId) => `/admin/kits/${encodeURIComponent(kitId)}/entitlements/${encodeURIComponent(userId)}`,
     /** POST /admin/kits/{kitId}/entitlements */
     adminGrantEntitlement: (kitId) => `/admin/kits/${encodeURIComponent(kitId)}/entitlements`,
+    /** POST /admin/entitlements/by-subscription/{stripeSubscriptionId}/status */
+    adminSetEntitlementSubscriptionStatus: (stripeSubscriptionId) => `/admin/entitlements/by-subscription/${encodeURIComponent(stripeSubscriptionId)}/status`,
     /** POST /admin/kits/{kitId}/licensed-package */
     adminLicensedPackage: (kitId) => `/admin/kits/${encodeURIComponent(kitId)}/licensed-package`
 };
