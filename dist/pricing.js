@@ -32,6 +32,12 @@ export const kitPricingMetadataSchema = z.object({
     priceCents: z.number().int().nonnegative().optional(),
     currency: kitCurrencySchema.default("USD"),
     interval: priceIntervalSchema.optional(),
+    /**
+     * Optional subscription free-trial length in days. Only meaningful when
+     * priceModel === 'subscription'; ignored/zeroed otherwise. Maps to Stripe's
+     * subscription `trial_period_days` at checkout.
+     */
+    trialDays: z.number().int().nonnegative().optional(),
     /** Paid kits default false (online-only); free kits are treated as downloadable. */
     downloadable: z.boolean().optional(),
     licenseType: licenseTypeSchema.default("default"),
@@ -66,6 +72,8 @@ export const setKitPricingRequestSchema = z.object({
     priceCents: z.number().int().nonnegative().optional(),
     currency: kitCurrencySchema.optional(),
     interval: priceIntervalSchema.optional(),
+    /** Subscription free-trial length in days; only meaningful for subscription kits. */
+    trialDays: z.number().int().nonnegative().optional(),
     downloadable: z.boolean().optional(),
     licenseType: licenseTypeSchema.optional(),
     licenseText: z.string().optional()

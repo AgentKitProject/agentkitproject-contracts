@@ -33,6 +33,12 @@ export declare const kitPricingMetadataSchema: z.ZodObject<{
     priceCents: z.ZodOptional<z.ZodNumber>;
     currency: z.ZodDefault<z.ZodEnum<["USD"]>>;
     interval: z.ZodOptional<z.ZodEnum<["month", "year"]>>;
+    /**
+     * Optional subscription free-trial length in days. Only meaningful when
+     * priceModel === 'subscription'; ignored/zeroed otherwise. Maps to Stripe's
+     * subscription `trial_period_days` at checkout.
+     */
+    trialDays: z.ZodOptional<z.ZodNumber>;
     /** Paid kits default false (online-only); free kits are treated as downloadable. */
     downloadable: z.ZodOptional<z.ZodBoolean>;
     licenseType: z.ZodDefault<z.ZodEnum<["default", "custom"]>>;
@@ -45,6 +51,7 @@ export declare const kitPricingMetadataSchema: z.ZodObject<{
     priceModel?: "one_time" | "subscription" | undefined;
     priceCents?: number | undefined;
     interval?: "month" | "year" | undefined;
+    trialDays?: number | undefined;
     downloadable?: boolean | undefined;
     licenseText?: string | undefined;
     licenseVersion?: string | undefined;
@@ -54,6 +61,7 @@ export declare const kitPricingMetadataSchema: z.ZodObject<{
     priceCents?: number | undefined;
     currency?: "USD" | undefined;
     interval?: "month" | "year" | undefined;
+    trialDays?: number | undefined;
     downloadable?: boolean | undefined;
     licenseType?: "custom" | "default" | undefined;
     licenseText?: string | undefined;
@@ -110,6 +118,8 @@ export declare const setKitPricingRequestSchema: z.ZodObject<{
     priceCents: z.ZodOptional<z.ZodNumber>;
     currency: z.ZodOptional<z.ZodEnum<["USD"]>>;
     interval: z.ZodOptional<z.ZodEnum<["month", "year"]>>;
+    /** Subscription free-trial length in days; only meaningful for subscription kits. */
+    trialDays: z.ZodOptional<z.ZodNumber>;
     downloadable: z.ZodOptional<z.ZodBoolean>;
     licenseType: z.ZodOptional<z.ZodEnum<["default", "custom"]>>;
     licenseText: z.ZodOptional<z.ZodString>;
@@ -120,6 +130,7 @@ export declare const setKitPricingRequestSchema: z.ZodObject<{
     priceCents?: number | undefined;
     currency?: "USD" | undefined;
     interval?: "month" | "year" | undefined;
+    trialDays?: number | undefined;
     downloadable?: boolean | undefined;
     licenseType?: "custom" | "default" | undefined;
     licenseText?: string | undefined;
@@ -130,6 +141,7 @@ export declare const setKitPricingRequestSchema: z.ZodObject<{
     priceCents?: number | undefined;
     currency?: "USD" | undefined;
     interval?: "month" | "year" | undefined;
+    trialDays?: number | undefined;
     downloadable?: boolean | undefined;
     licenseType?: "custom" | "default" | undefined;
     licenseText?: string | undefined;
