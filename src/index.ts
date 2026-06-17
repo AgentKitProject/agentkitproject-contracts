@@ -119,3 +119,22 @@ export {
   type ListFavoritesResponse,
   type RemoveFavoriteResponse
 } from "./favorites.js";
+
+export {
+  auditActorTypeSchema,
+  auditTargetTypeSchema,
+  auditActionSchema,
+  auditMetadataSchema,
+  auditEventSchema,
+  listAuditLogsQuerySchema,
+  listAuditLogsResponseSchema,
+  marketBackendAuditRoutes,
+  browserAuditRoutes,
+  type AuditActorType,
+  type AuditTargetType,
+  type AuditAction,
+  type AuditMetadata,
+  type AuditEvent,
+  type ListAuditLogsQuery,
+  type ListAuditLogsResponse
+} from "./audit.js";

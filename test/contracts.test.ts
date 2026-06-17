@@ -21,6 +21,12 @@ import {
   marketBackendFavoritesRoutes,
   forgeFavoritesRoutes,
   browserFavoritesRoutes,
+  auditEventSchema,
+  listAuditLogsQuerySchema,
+  listAuditLogsResponseSchema,
+  auditActionSchema,
+  marketBackendAuditRoutes,
+  browserAuditRoutes,
   profileRoutes,
   publicKitDetailResponseSchema,
   publicPublisherProfileSchema,
@@ -226,6 +232,35 @@ describe("contracts", () => {
       browserFavoritesRoutes.favorite("kit1"),
       routes.browserFavorites.favorite.replace("{kitId}", "kit1")
     );
+  });
+
+  it("audit event fixture and query/response schemas validate", () => {
+    auditEventSchema.parse(fixture("audit-event.json"));
+    listAuditLogsResponseSchema.parse({ items: [fixture("audit-event.json")] });
+    listAuditLogsResponseSchema.parse({
+      items: [fixture("audit-event.json")],
+      nextToken: "abc"
+    });
+    listAuditLogsQuerySchema.parse({});
+    listAuditLogsQuerySchema.parse({
+      actorUserId: "u1",
+      targetType: "kit",
+      targetId: "kit1",
+      action: "kit.hidden",
+      since: "2026-01-01T00:00:00.000Z",
+      limit: 50
+    });
+    assert.throws(() => auditActionSchema.parse("not.an.action"));
+    assert.throws(() => listAuditLogsQuerySchema.parse({ limit: 0 }));
+  });
+
+  it("audit routes produce expected paths", () => {
+    const routes = fixture("routes.json");
+    assert.equal(
+      marketBackendAuditRoutes.adminListAuditLogs(),
+      routes.marketBackendAudit.adminListAuditLogs
+    );
+    assert.equal(browserAuditRoutes.auditLogs(), routes.browserAudit.auditLogs);
   });
 
   it("environments.json satisfies the service manifest schema", () => {

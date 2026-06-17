@@ -40,10 +40,10 @@ export declare const organizationSchema: z.ZodObject<{
     updatedAt: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     type: "personal" | "team";
+    orgId: string;
     slug: string;
     displayName: string;
     updatedAt: string;
-    orgId: string;
     ownerUserId: string;
     createdAt: string;
     handle?: string | undefined;
@@ -52,10 +52,10 @@ export declare const organizationSchema: z.ZodObject<{
     workosOrganizationId?: string | null | undefined;
 }, {
     type: "personal" | "team";
+    orgId: string;
     slug: string;
     displayName: string;
     updatedAt: string;
-    orgId: string;
     ownerUserId: string;
     createdAt: string;
     handle?: string | undefined;
@@ -73,16 +73,16 @@ export declare const publicOrganizationSchema: z.ZodObject<{
     avatarInitials: z.ZodOptional<z.ZodString>;
     verified: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
+    orgId: string;
     slug: string;
     displayName: string;
-    orgId: string;
     handle?: string | undefined;
     avatarInitials?: string | undefined;
     verified?: boolean | undefined;
 }, {
+    orgId: string;
     slug: string;
     displayName: string;
-    orgId: string;
     handle?: string | undefined;
     avatarInitials?: string | undefined;
     verified?: boolean | undefined;
@@ -97,17 +97,17 @@ export declare const orgMembershipSchema: z.ZodObject<{
     createdAt: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     status: "removed" | "active" | "invited";
-    userId: string;
     orgId: string;
+    userId: string;
     createdAt: string;
-    role: "owner" | "admin" | "member" | "viewer";
+    role: "admin" | "owner" | "member" | "viewer";
     invitedByUserId?: string | undefined;
 }, {
     status: "removed" | "active" | "invited";
-    userId: string;
     orgId: string;
+    userId: string;
     createdAt: string;
-    role: "owner" | "admin" | "member" | "viewer";
+    role: "admin" | "owner" | "member" | "viewer";
     invitedByUserId?: string | undefined;
 }>;
 export type OrgMembership = z.infer<typeof orgMembershipSchema>;
@@ -125,14 +125,14 @@ export declare const orgInviteSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     orgId: string;
     createdAt: string;
-    role: "owner" | "admin" | "member" | "viewer";
+    role: "admin" | "owner" | "member" | "viewer";
     invitedByUserId: string;
     userId?: string | undefined;
     email?: string | undefined;
 }, {
     orgId: string;
     createdAt: string;
-    role: "owner" | "admin" | "member" | "viewer";
+    role: "admin" | "owner" | "member" | "viewer";
     invitedByUserId: string;
     userId?: string | undefined;
     email?: string | undefined;
@@ -157,10 +157,10 @@ export declare const addOrgMemberRequestSchema: z.ZodObject<{
     role: z.ZodEnum<["owner", "admin", "member", "viewer"]>;
 }, "strip", z.ZodTypeAny, {
     userId: string;
-    role: "owner" | "admin" | "member" | "viewer";
+    role: "admin" | "owner" | "member" | "viewer";
 }, {
     userId: string;
-    role: "owner" | "admin" | "member" | "viewer";
+    role: "admin" | "owner" | "member" | "viewer";
 }>;
 export type AddOrgMemberRequest = z.infer<typeof addOrgMemberRequestSchema>;
 export declare const removeOrgMemberRequestSchema: z.ZodObject<{
@@ -206,11 +206,11 @@ export declare const deleteOrgResponseSchema: z.ZodObject<{
     ok: z.ZodLiteral<true>;
     orgId: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    ok: true;
     orgId: string;
+    ok: true;
 }, {
-    ok: true;
     orgId: string;
+    ok: true;
 }>;
 export type DeleteOrgResponse = z.infer<typeof deleteOrgResponseSchema>;
 /**

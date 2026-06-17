@@ -57,5 +57,11 @@
   "browserFavorites": {
     "favorites": "/api/favorites",
     "favorite": "/api/favorites/{kitId}"
+  },
+  "marketBackendAudit": {
+    "adminListAuditLogs": "/admin/audit-logs"
+  },
+  "browserAudit": {
+    "auditLogs": "/api/admin/audit-logs"
   }
 }

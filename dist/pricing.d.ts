@@ -114,8 +114,8 @@ export declare const setKitPricingRequestSchema: z.ZodObject<{
     licenseType: z.ZodOptional<z.ZodEnum<["default", "custom"]>>;
     licenseText: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    pricing: "free" | "paid";
     actorUserId: string;
+    pricing: "free" | "paid";
     priceModel?: "one_time" | "subscription" | undefined;
     priceCents?: number | undefined;
     currency?: "USD" | undefined;
@@ -124,8 +124,8 @@ export declare const setKitPricingRequestSchema: z.ZodObject<{
     licenseType?: "custom" | "default" | undefined;
     licenseText?: string | undefined;
 }, {
-    pricing: "free" | "paid";
     actorUserId: string;
+    pricing: "free" | "paid";
     priceModel?: "one_time" | "subscription" | undefined;
     priceCents?: number | undefined;
     currency?: "USD" | undefined;
