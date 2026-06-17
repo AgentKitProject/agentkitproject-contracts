@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.6.0...v0.7.0) (2026-06-17)
+
+
+### Features
+
+* add audit log contracts (AuditEvent, list query/response, routes) ([45327ba](https://github.com/AgentKitProject/agentkitproject-contracts/commit/45327babcb54308fe11cd1cbb5055e8ed96be87e))
+
 ## [0.6.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.5.0...v0.6.0) (2026-06-16)
 
 
