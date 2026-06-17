@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.9.0...v0.10.0) (2026-06-17)
+
+
+### Features
+
+* **pricing:** export subscription-status schema + add audit action ([8cb1ad0](https://github.com/AgentKitProject/agentkitproject-contracts/commit/8cb1ad0adaa117cad2e287f7fd7d4e42dc4c2aae))
+
 ## [0.9.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.8.0...v0.9.0) (2026-06-17)
 
 
