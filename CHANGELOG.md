@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.10.0...v0.11.0) (2026-06-17)
+
+
+### Features
+
+* **orgs:** add Stripe Connect seller-payout fields + routes ([d171f90](https://github.com/AgentKitProject/agentkitproject-contracts/commit/d171f908b898afd8beeb5e5ecd09ff85ce0b67d9))
+
 ## [0.10.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.9.0...v0.10.0) (2026-06-17)
 
 
