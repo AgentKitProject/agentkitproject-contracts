@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.7.0...v0.8.0) (2026-06-17)
+
+
+### Features
+
+* **pricing:** add optional trialDays to kit pricing metadata + set-pricing request ([bf8ac8a](https://github.com/AgentKitProject/agentkitproject-contracts/commit/bf8ac8af5e578dc988ab7953b7ca5f2ef912497c))
+
 ## [0.7.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.6.0...v0.7.0) (2026-06-17)
 
 
