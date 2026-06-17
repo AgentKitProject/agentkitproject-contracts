@@ -15,6 +15,8 @@ import {
   DEFAULT_KIT_LICENSE_VERSION,
   organizationSchema,
   orgMembershipSchema,
+  orgPayoutRoutes,
+  setOrgStripeAccountRequestSchema,
   favoriteSchema,
   addFavoriteRequestSchema,
   listFavoritesResponseSchema,
@@ -261,6 +263,47 @@ describe("contracts", () => {
       routes.marketBackendAudit.adminListAuditLogs
     );
     assert.equal(browserAuditRoutes.auditLogs(), routes.browserAudit.auditLogs);
+  });
+
+  it("organizations accept Stripe payout fields", () => {
+    const org = organizationSchema.parse({
+      orgId: "org1",
+      slug: "acme",
+      displayName: "Acme",
+      type: "team",
+      ownerUserId: "u1",
+      stripeAccountId: "acct_123",
+      chargesEnabled: true,
+      payoutsEnabled: true,
+      payoutOnboardedAt: "2026-06-16T00:00:00.000Z",
+      createdAt: "2026-06-16T00:00:00.000Z",
+      updatedAt: "2026-06-16T00:00:00.000Z"
+    });
+    assert.equal(org.stripeAccountId, "acct_123");
+    assert.equal(org.payoutsEnabled, true);
+  });
+
+  it("seller-payout routes + set-stripe-account schema", () => {
+    assert.equal(orgPayoutRoutes.beginOnboarding("org1"), "/api/orgs/org1/payouts/onboard");
+    assert.equal(orgPayoutRoutes.payoutStatus("org1"), "/api/orgs/org1/payouts/status");
+    assert.equal(
+      marketBackendOrgRoutes.adminSetOrgStripeAccount("org1"),
+      "/admin/orgs/org1/stripe-account"
+    );
+    assert.equal(
+      marketBackendOrgRoutes.adminOrgPayoutStatus("org1"),
+      "/admin/orgs/org1/payout-status"
+    );
+    assert.equal(
+      marketBackendOrgRoutes.adminOrgByStripeAccount("acct_1"),
+      "/admin/orgs/by-stripe-account/acct_1"
+    );
+    setOrgStripeAccountRequestSchema.parse({
+      stripeAccountId: "acct_1",
+      chargesEnabled: false,
+      payoutsEnabled: false
+    });
+    assert.throws(() => setOrgStripeAccountRequestSchema.parse({ chargesEnabled: true, payoutsEnabled: true }));
   });
 
   it("environments.json satisfies the service manifest schema", () => {

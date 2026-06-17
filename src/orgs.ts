@@ -50,6 +50,17 @@ export const organizationSchema = z.object({
   verified: z.boolean().optional(),
   /** WorkOS Organization ID — null until SSO is configured (future). */
   workosOrganizationId: z.string().nullable().optional(),
+  /**
+   * Stripe Connect seller-payout fields (Market paid-kit seller payouts).
+   * `stripeAccountId` is the org's Express connected-account id. `chargesEnabled`
+   * /`payoutsEnabled` mirror the connected account's capability state (synced from
+   * Stripe `account.updated`). `payoutOnboardedAt` is stamped once payouts first
+   * become enabled. All optional/absent until the org begins payout onboarding.
+   */
+  stripeAccountId: z.string().optional(),
+  chargesEnabled: z.boolean().optional(),
+  payoutsEnabled: z.boolean().optional(),
+  payoutOnboardedAt: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string()
 });
@@ -168,6 +179,24 @@ export const forgeOrgRoutes = {
 } as const;
 
 // ---------------------------------------------------------------------------
+// Browser org-payout routes (market-app, AuthKit-cookie auth, owner/admin only)
+// ---------------------------------------------------------------------------
+
+/**
+ * Seller-payout routes the Market web UI calls for Stripe Connect onboarding.
+ * Browser-facing (AuthKit cookie session via requireUserForApi), gated to the
+ * org's owner/admin. Stripe API calls live only in market-app — never in core.
+ */
+export const orgPayoutRoutes = {
+  /** POST /api/orgs/{orgId}/payouts/onboard — create/continue Express onboarding; returns { url }. */
+  beginOnboarding: (orgId: string) =>
+    `/api/orgs/${encodeURIComponent(orgId)}/payouts/onboard`,
+  /** GET /api/orgs/{orgId}/payouts/status — { stripeAccountId?, chargesEnabled, payoutsEnabled, needsOnboarding }. */
+  payoutStatus: (orgId: string) =>
+    `/api/orgs/${encodeURIComponent(orgId)}/payouts/status`
+} as const;
+
+// ---------------------------------------------------------------------------
 // Route builders (Seam B — market-app ↔ agentkitmarket-infra, admin-key auth)
 // ---------------------------------------------------------------------------
 
@@ -201,5 +230,31 @@ export const marketBackendOrgRoutes = {
     `/admin/kits/${encodeURIComponent(kitId)}/transfer`,
   /** POST /admin/kits/{kitId}/visibility */
   adminSetKitVisibility: (kitId: string) =>
-    `/admin/kits/${encodeURIComponent(kitId)}/visibility`
+    `/admin/kits/${encodeURIComponent(kitId)}/visibility`,
+  /** POST /admin/orgs/{orgId}/stripe-account — persist Stripe payout fields on an org. */
+  adminSetOrgStripeAccount: (orgId: string) =>
+    `/admin/orgs/${encodeURIComponent(orgId)}/stripe-account`,
+  /** GET /admin/orgs/{orgId}/payout-status — read an org's stored Stripe payout fields. */
+  adminOrgPayoutStatus: (orgId: string) =>
+    `/admin/orgs/${encodeURIComponent(orgId)}/payout-status`,
+  /** GET /admin/orgs/by-stripe-account/{id} — reverse lookup for the account.updated webhook. */
+  adminOrgByStripeAccount: (stripeAccountId: string) =>
+    `/admin/orgs/by-stripe-account/${encodeURIComponent(stripeAccountId)}`
 } as const;
+
+// ---------------------------------------------------------------------------
+// Seller-payout request schema (Seam B — set Stripe account fields on an org)
+// ---------------------------------------------------------------------------
+
+/**
+ * Body of POST /admin/orgs/{orgId}/stripe-account. market-app resolves these
+ * fields from Stripe (account create / account.updated) and the backend just
+ * persists them. Core never calls Stripe.
+ */
+export const setOrgStripeAccountRequestSchema = z.object({
+  stripeAccountId: z.string().min(1),
+  chargesEnabled: z.boolean(),
+  payoutsEnabled: z.boolean(),
+  payoutOnboardedAt: z.string().optional()
+});
+export type SetOrgStripeAccountRequest = z.infer<typeof setOrgStripeAccountRequestSchema>;

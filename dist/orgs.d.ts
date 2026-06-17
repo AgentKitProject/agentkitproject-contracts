@@ -36,6 +36,17 @@ export declare const organizationSchema: z.ZodObject<{
     verified: z.ZodOptional<z.ZodBoolean>;
     /** WorkOS Organization ID — null until SSO is configured (future). */
     workosOrganizationId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    /**
+     * Stripe Connect seller-payout fields (Market paid-kit seller payouts).
+     * `stripeAccountId` is the org's Express connected-account id. `chargesEnabled`
+     * /`payoutsEnabled` mirror the connected account's capability state (synced from
+     * Stripe `account.updated`). `payoutOnboardedAt` is stamped once payouts first
+     * become enabled. All optional/absent until the org begins payout onboarding.
+     */
+    stripeAccountId: z.ZodOptional<z.ZodString>;
+    chargesEnabled: z.ZodOptional<z.ZodBoolean>;
+    payoutsEnabled: z.ZodOptional<z.ZodBoolean>;
+    payoutOnboardedAt: z.ZodOptional<z.ZodString>;
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 }, "strip", z.ZodTypeAny, {
@@ -50,6 +61,10 @@ export declare const organizationSchema: z.ZodObject<{
     avatarInitials?: string | undefined;
     verified?: boolean | undefined;
     workosOrganizationId?: string | null | undefined;
+    stripeAccountId?: string | undefined;
+    chargesEnabled?: boolean | undefined;
+    payoutsEnabled?: boolean | undefined;
+    payoutOnboardedAt?: string | undefined;
 }, {
     type: "personal" | "team";
     orgId: string;
@@ -62,6 +77,10 @@ export declare const organizationSchema: z.ZodObject<{
     avatarInitials?: string | undefined;
     verified?: boolean | undefined;
     workosOrganizationId?: string | null | undefined;
+    stripeAccountId?: string | undefined;
+    chargesEnabled?: boolean | undefined;
+    payoutsEnabled?: boolean | undefined;
+    payoutOnboardedAt?: string | undefined;
 }>;
 export type Organization = z.infer<typeof organizationSchema>;
 /** Public-safe subset of an Organization (catalog / profile display). */
@@ -238,6 +257,17 @@ export declare const forgeOrgRoutes: {
     readonly setKitVisibility: (kitId: string) => string;
 };
 /**
+ * Seller-payout routes the Market web UI calls for Stripe Connect onboarding.
+ * Browser-facing (AuthKit cookie session via requireUserForApi), gated to the
+ * org's owner/admin. Stripe API calls live only in market-app — never in core.
+ */
+export declare const orgPayoutRoutes: {
+    /** POST /api/orgs/{orgId}/payouts/onboard — create/continue Express onboarding; returns { url }. */
+    readonly beginOnboarding: (orgId: string) => string;
+    /** GET /api/orgs/{orgId}/payouts/status — { stripeAccountId?, chargesEnabled, payoutsEnabled, needsOnboarding }. */
+    readonly payoutStatus: (orgId: string) => string;
+};
+/**
  * Org-related backend routes market-app calls on the Market API Gateway (Seam B).
  * Extend marketBackendRoutes in market.ts with these entries.
  */
@@ -260,4 +290,32 @@ export declare const marketBackendOrgRoutes: {
     readonly adminTransferKit: (kitId: string) => string;
     /** POST /admin/kits/{kitId}/visibility */
     readonly adminSetKitVisibility: (kitId: string) => string;
+    /** POST /admin/orgs/{orgId}/stripe-account — persist Stripe payout fields on an org. */
+    readonly adminSetOrgStripeAccount: (orgId: string) => string;
+    /** GET /admin/orgs/{orgId}/payout-status — read an org's stored Stripe payout fields. */
+    readonly adminOrgPayoutStatus: (orgId: string) => string;
+    /** GET /admin/orgs/by-stripe-account/{id} — reverse lookup for the account.updated webhook. */
+    readonly adminOrgByStripeAccount: (stripeAccountId: string) => string;
 };
+/**
+ * Body of POST /admin/orgs/{orgId}/stripe-account. market-app resolves these
+ * fields from Stripe (account create / account.updated) and the backend just
+ * persists them. Core never calls Stripe.
+ */
+export declare const setOrgStripeAccountRequestSchema: z.ZodObject<{
+    stripeAccountId: z.ZodString;
+    chargesEnabled: z.ZodBoolean;
+    payoutsEnabled: z.ZodBoolean;
+    payoutOnboardedAt: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    stripeAccountId: string;
+    chargesEnabled: boolean;
+    payoutsEnabled: boolean;
+    payoutOnboardedAt?: string | undefined;
+}, {
+    stripeAccountId: string;
+    chargesEnabled: boolean;
+    payoutsEnabled: boolean;
+    payoutOnboardedAt?: string | undefined;
+}>;
+export type SetOrgStripeAccountRequest = z.infer<typeof setOrgStripeAccountRequestSchema>;
