@@ -160,6 +160,8 @@ export const forgeOrgRoutes = {
   listMyOrgs: () => "/api/forge/orgs",
   /** POST /api/forge/orgs — create a new org. */
   createOrg: () => "/api/forge/orgs",
+  /** GET /api/forge/orgs/{orgId}/kits — list all kits owned by an org (incl private; requires active membership). */
+  listOrgKits: (orgId: string) => `/api/forge/orgs/${encodeURIComponent(orgId)}/kits`,
   /** GET/POST /api/forge/orgs/{orgId}/members */
   orgMembers: (orgId: string) => `/api/forge/orgs/${encodeURIComponent(orgId)}/members`,
   /** DELETE /api/forge/orgs/{orgId}/members/{userId} */
@@ -213,6 +215,9 @@ export const marketBackendOrgRoutes = {
   /** DELETE /admin/orgs/{orgId} */
   adminDeleteOrg: (orgId: string) =>
     `/admin/orgs/${encodeURIComponent(orgId)}`,
+  /** GET /admin/orgs/{orgId}/kits — list all kits owned by an org (incl private); actorUserId must be an active member. */
+  adminListOrgKits: (orgId: string) =>
+    `/admin/orgs/${encodeURIComponent(orgId)}/kits`,
   /** GET/POST /admin/orgs/{orgId}/members */
   adminOrgMembers: (orgId: string) =>
     `/admin/orgs/${encodeURIComponent(orgId)}/members`,

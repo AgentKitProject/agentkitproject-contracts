@@ -72,6 +72,10 @@ describe("contracts", () => {
     assert.equal(forgeOrgRoutes.listMyOrgs(), routes.forgeOrgs.listMyOrgs);
     assert.equal(forgeOrgRoutes.createOrg(), routes.forgeOrgs.createOrg);
     assert.equal(
+      forgeOrgRoutes.listOrgKits("org1"),
+      routes.forgeOrgs.listOrgKits.replace("{orgId}", "org1")
+    );
+    assert.equal(
       forgeOrgRoutes.deleteOrg("org1"),
       routes.forgeOrgs.deleteOrg.replace("{orgId}", "org1")
     );
@@ -108,6 +112,10 @@ describe("contracts", () => {
     assert.equal(
       marketBackendOrgRoutes.adminDeleteOrg("org1"),
       routes.marketBackendOrgs.adminDeleteOrg.replace("{orgId}", "org1")
+    );
+    assert.equal(
+      marketBackendOrgRoutes.adminListOrgKits("org1"),
+      routes.marketBackendOrgs.adminListOrgKits.replace("{orgId}", "org1")
     );
     assert.equal(
       marketBackendOrgRoutes.adminOrgMembers("org1"),

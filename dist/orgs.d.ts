@@ -241,6 +241,8 @@ export declare const forgeOrgRoutes: {
     readonly listMyOrgs: () => string;
     /** POST /api/forge/orgs — create a new org. */
     readonly createOrg: () => string;
+    /** GET /api/forge/orgs/{orgId}/kits — list all kits owned by an org (incl private; requires active membership). */
+    readonly listOrgKits: (orgId: string) => string;
     /** GET/POST /api/forge/orgs/{orgId}/members */
     readonly orgMembers: (orgId: string) => string;
     /** DELETE /api/forge/orgs/{orgId}/members/{userId} */
@@ -278,6 +280,8 @@ export declare const marketBackendOrgRoutes: {
     readonly adminCreateOrg: () => string;
     /** DELETE /admin/orgs/{orgId} */
     readonly adminDeleteOrg: (orgId: string) => string;
+    /** GET /admin/orgs/{orgId}/kits — list all kits owned by an org (incl private); actorUserId must be an active member. */
+    readonly adminListOrgKits: (orgId: string) => string;
     /** GET/POST /admin/orgs/{orgId}/members */
     readonly adminOrgMembers: (orgId: string) => string;
     /** PATCH/DELETE /admin/orgs/{orgId}/members/{userId} */

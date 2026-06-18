@@ -15,6 +15,7 @@
   "forgeOrgs": {
     "listMyOrgs": "/api/forge/orgs",
     "createOrg": "/api/forge/orgs",
+    "listOrgKits": "/api/forge/orgs/{orgId}/kits",
     "deleteOrg": "/api/forge/orgs/{orgId}",
     "orgMembers": "/api/forge/orgs/{orgId}/members",
     "orgMember": "/api/forge/orgs/{orgId}/members/{userId}",
@@ -27,6 +28,7 @@
     "adminListUserOrgs": "/admin/users/{userId}/orgs",
     "adminCreateOrg": "/admin/orgs",
     "adminDeleteOrg": "/admin/orgs/{orgId}",
+    "adminListOrgKits": "/admin/orgs/{orgId}/kits",
     "adminOrgMembers": "/admin/orgs/{orgId}/members",
     "adminOrgMember": "/admin/orgs/{orgId}/members/{userId}",
     "adminListUserInvites": "/admin/users/{userId}/invites",
