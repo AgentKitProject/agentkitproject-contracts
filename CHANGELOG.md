@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.11.0...v0.12.0) (2026-06-18)
+
+
+### Features
+
+* **orgs:** add org-kits listing routes (forgeOrgRoutes.listOrgKits + marketBackendOrgRoutes.adminListOrgKits) ([d0de16c](https://github.com/AgentKitProject/agentkitproject-contracts/commit/d0de16c6aefb0fa23f66ab5f24afa3bf9544a62c))
+
 ## [0.11.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.10.0...v0.11.0) (2026-06-17)
 
 
