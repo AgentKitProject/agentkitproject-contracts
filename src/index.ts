@@ -91,8 +91,13 @@ export {
   licensedPackageRequestSchema,
   licensedPackageResponseSchema,
   listEntitlementsResponseSchema,
+  serviceLicensedPackageErrorSchema,
+  serviceLicensedPackageRequestSchema,
+  serviceLicensedPackageResponseSchema,
   marketBackendPricingRoutes,
   forgePricingRoutes,
+  marketServiceRoutes,
+  marketServiceAuthHeader,
   DEFAULT_KIT_LICENSE_VERSION,
   type KitPricing,
   type PriceModel,
@@ -108,7 +113,10 @@ export {
   type SetEntitlementSubscriptionStatusRequest,
   type LicensedPackageRequest,
   type LicensedPackageResponse,
-  type ListEntitlementsResponse
+  type ListEntitlementsResponse,
+  type ServiceLicensedPackageError,
+  type ServiceLicensedPackageRequest,
+  type ServiceLicensedPackageResponse
 } from "./pricing.js";
 
 export {

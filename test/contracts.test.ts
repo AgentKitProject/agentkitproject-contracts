@@ -8,6 +8,11 @@ import {
   marketBackendOrgRoutes,
   marketBackendPricingRoutes,
   forgePricingRoutes,
+  marketServiceRoutes,
+  marketServiceAuthHeader,
+  serviceLicensedPackageRequestSchema,
+  serviceLicensedPackageResponseSchema,
+  serviceLicensedPackageErrorSchema,
   entitlementSchema,
   setKitPricingRequestSchema,
   grantEntitlementRequestSchema,
@@ -206,6 +211,62 @@ describe("contracts", () => {
       forgePricingRoutes.licensedPackage("my-kit"),
       routes.forgePricing.licensedPackage.replace("{slug}", "my-kit")
     );
+  });
+
+  it("market service licensed-package route + auth header", () => {
+    const routes = fixture("routes.json");
+    assert.equal(
+      marketServiceRoutes.licensedPackage("my-kit"),
+      routes.marketService.licensedPackage.replace("{slug}", "my-kit")
+    );
+    assert.equal(
+      marketServiceRoutes.licensedPackage("a/b"),
+      "/api/forge/service/kits/a%2Fb/licensed-package"
+    );
+    assert.equal(marketServiceAuthHeader, "x-agentkit-service-key");
+  });
+
+  it("service licensed-package request/response schemas + error enum", () => {
+    // Request asserts userId; kitId optional.
+    serviceLicensedPackageRequestSchema.parse({ userId: "user_1" });
+    serviceLicensedPackageRequestSchema.parse({ userId: "user_1", kitId: "kit_1" });
+    assert.throws(() => serviceLicensedPackageRequestSchema.parse({}));
+    assert.throws(() => serviceLicensedPackageRequestSchema.parse({ userId: "" }));
+
+    // Response = the user-authed licensed-package payload + resolved kit context.
+    serviceLicensedPackageResponseSchema.parse({
+      kitId: "kit_1",
+      userId: "user_1",
+      entitlementId: "ent_1",
+      fileName: "my-kit.agentkit.zip",
+      contentBase64: "UEs=",
+      sha256: "abc",
+      licenseVersion: DEFAULT_KIT_LICENSE_VERSION,
+      watermark: {
+        entitlementId: "ent_1",
+        userId: "user_1",
+        kitId: "kit_1",
+        grantedAt: "2026-06-18T00:00:00.000Z",
+        hash: "deadbeef"
+      },
+      slug: "my-kit",
+      pricing: "paid",
+      downloadable: false,
+      onlineOnly: true
+    });
+
+    // Error enum members.
+    for (const code of [
+      "unconfigured",
+      "unauthorized",
+      "not_entitled",
+      "not_found",
+      "invalid_request",
+      "backend_unavailable"
+    ]) {
+      serviceLicensedPackageErrorSchema.parse(code);
+    }
+    assert.throws(() => serviceLicensedPackageErrorSchema.parse("nope"));
   });
 
   it("favorite fixture and request schemas validate", () => {

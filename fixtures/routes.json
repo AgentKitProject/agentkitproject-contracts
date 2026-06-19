@@ -47,6 +47,9 @@
     "myEntitlements": "/api/forge/me/entitlements",
     "licensedPackage": "/api/forge/kits/{slug}/licensed-package"
   },
+  "marketService": {
+    "licensedPackage": "/api/forge/service/kits/{slug}/licensed-package"
+  },
   "marketBackendFavorites": {
     "adminListUserFavorites": "/admin/users/{userId}/favorites",
     "adminAddUserFavorite": "/admin/users/{userId}/favorites",
