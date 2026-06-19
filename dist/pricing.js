@@ -123,6 +123,69 @@ export const listEntitlementsResponseSchema = z.object({
     items: z.array(entitlementSchema)
 });
 // ---------------------------------------------------------------------------
+// Seam S (web-forge ↔ market-app, SERVICE-KEY auth) — protected-kit resolution
+// for the hosted AgentKitAuto worker path.
+//
+// THIRD auth path on market-app's /api/forge surface — NOT the AuthKit cookie,
+// NOT the Forge device-auth bearer (requireForgeUser). The web-forge SSR server
+// (NOT the worker, NOT a browser) asserts an entitled user's id with a shared
+// service key so it can fetch the SAME licensed package the user-authed
+// /api/forge/kits/{slug}/licensed-package route returns, WITHOUT the user's live
+// session — while entitlement is STILL enforced server-side (Market verifies the
+// asserted userId is entitled). The service key removes the SESSION requirement,
+// never the ENTITLEMENT requirement.
+// ---------------------------------------------------------------------------
+/** Header carrying the web-forge↔market-app shared service key (constant-time
+ *  compared server-side). Value lives in MARKET_SERVICE_KEY on BOTH sides; it is
+ *  server-only and never shipped to a browser bundle or to Forge/the worker. */
+export const marketServiceAuthHeader = "x-agentkit-service-key";
+/** Error codes returned by the service licensed-package endpoint. */
+export const serviceLicensedPackageErrorSchema = z.enum([
+    /** Service key env unset on the provider → endpoint disabled (503). */
+    "unconfigured",
+    /** Missing/!match service key (401). */
+    "unauthorized",
+    /** Asserted user holds no active entitlement for this kit (403). */
+    "not_entitled",
+    /** Kit (slug/kitId) not found (404). */
+    "not_found",
+    /** Malformed request body (400). */
+    "invalid_request",
+    /** Upstream Market backend failure (502). */
+    "backend_unavailable"
+]);
+/**
+ * POST {marketServiceRoutes.licensedPackage(slug)} body. Asserts the entitled
+ * user's id (no session). `slug` is the path param; `kitId` may be supplied to
+ * skip the slug→kitId resolution (optional, advisory). At least the path slug
+ * always identifies the kit.
+ */
+export const serviceLicensedPackageRequestSchema = z.object({
+    userId: z.string().min(1),
+    kitId: z.string().min(1).optional()
+});
+/**
+ * Response from the service licensed-package endpoint — the SAME watermarked
+ * licensed-package payload the user-authed forge route returns (base64 bytes +
+ * watermark + sha256), plus the resolved kit context fields (slug/pricing/
+ * downloadable/onlineOnly) the consumer uses to enforce no-persist. The bytes
+ * are held in memory only and never persisted; never log this payload.
+ */
+export const serviceLicensedPackageResponseSchema = licensedPackageResponseSchema.extend({
+    slug: z.string().min(1),
+    pricing: kitPricingSchema,
+    downloadable: z.boolean(),
+    onlineOnly: z.boolean()
+});
+// ---------------------------------------------------------------------------
+// Route builder (Seam S — web-forge ↔ market-app, service-key auth)
+// ---------------------------------------------------------------------------
+export const marketServiceRoutes = {
+    /** POST /api/forge/service/kits/{slug}/licensed-package — service-key authed,
+     *  entitlement-gated, asserts userId. */
+    licensedPackage: (slug) => `/api/forge/service/kits/${encodeURIComponent(slug)}/licensed-package`
+};
+// ---------------------------------------------------------------------------
 // Route builders (Seam B — market-app ↔ agentkitmarket-infra, admin-key auth)
 // ---------------------------------------------------------------------------
 export const marketBackendPricingRoutes = {

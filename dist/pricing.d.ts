@@ -328,6 +328,114 @@ export declare const listEntitlementsResponseSchema: z.ZodObject<{
     }[];
 }>;
 export type ListEntitlementsResponse = z.infer<typeof listEntitlementsResponseSchema>;
+/** Header carrying the web-forge↔market-app shared service key (constant-time
+ *  compared server-side). Value lives in MARKET_SERVICE_KEY on BOTH sides; it is
+ *  server-only and never shipped to a browser bundle or to Forge/the worker. */
+export declare const marketServiceAuthHeader: "x-agentkit-service-key";
+/** Error codes returned by the service licensed-package endpoint. */
+export declare const serviceLicensedPackageErrorSchema: z.ZodEnum<["unconfigured", "unauthorized", "not_entitled", "not_found", "invalid_request", "backend_unavailable"]>;
+export type ServiceLicensedPackageError = z.infer<typeof serviceLicensedPackageErrorSchema>;
+/**
+ * POST {marketServiceRoutes.licensedPackage(slug)} body. Asserts the entitled
+ * user's id (no session). `slug` is the path param; `kitId` may be supplied to
+ * skip the slug→kitId resolution (optional, advisory). At least the path slug
+ * always identifies the kit.
+ */
+export declare const serviceLicensedPackageRequestSchema: z.ZodObject<{
+    userId: z.ZodString;
+    kitId: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    userId: string;
+    kitId?: string | undefined;
+}, {
+    userId: string;
+    kitId?: string | undefined;
+}>;
+export type ServiceLicensedPackageRequest = z.infer<typeof serviceLicensedPackageRequestSchema>;
+/**
+ * Response from the service licensed-package endpoint — the SAME watermarked
+ * licensed-package payload the user-authed forge route returns (base64 bytes +
+ * watermark + sha256), plus the resolved kit context fields (slug/pricing/
+ * downloadable/onlineOnly) the consumer uses to enforce no-persist. The bytes
+ * are held in memory only and never persisted; never log this payload.
+ */
+export declare const serviceLicensedPackageResponseSchema: z.ZodObject<{
+    kitId: z.ZodString;
+    userId: z.ZodString;
+    entitlementId: z.ZodString;
+    fileName: z.ZodString;
+    contentBase64: z.ZodString;
+    sha256: z.ZodString;
+    licenseVersion: z.ZodString;
+    watermark: z.ZodObject<{
+        entitlementId: z.ZodString;
+        userId: z.ZodString;
+        kitId: z.ZodString;
+        grantedAt: z.ZodString;
+        hash: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        userId: string;
+        kitId: string;
+        entitlementId: string;
+        grantedAt: string;
+        hash: string;
+    }, {
+        userId: string;
+        kitId: string;
+        entitlementId: string;
+        grantedAt: string;
+        hash: string;
+    }>;
+} & {
+    slug: z.ZodString;
+    pricing: z.ZodEnum<["free", "paid"]>;
+    downloadable: z.ZodBoolean;
+    onlineOnly: z.ZodBoolean;
+}, "strip", z.ZodTypeAny, {
+    userId: string;
+    kitId: string;
+    slug: string;
+    fileName: string;
+    sha256: string;
+    pricing: "free" | "paid";
+    downloadable: boolean;
+    licenseVersion: string;
+    entitlementId: string;
+    contentBase64: string;
+    watermark: {
+        userId: string;
+        kitId: string;
+        entitlementId: string;
+        grantedAt: string;
+        hash: string;
+    };
+    onlineOnly: boolean;
+}, {
+    userId: string;
+    kitId: string;
+    slug: string;
+    fileName: string;
+    sha256: string;
+    pricing: "free" | "paid";
+    downloadable: boolean;
+    licenseVersion: string;
+    entitlementId: string;
+    contentBase64: string;
+    watermark: {
+        userId: string;
+        kitId: string;
+        entitlementId: string;
+        grantedAt: string;
+        hash: string;
+    };
+    onlineOnly: boolean;
+}>;
+export type ServiceLicensedPackageResponse = z.infer<typeof serviceLicensedPackageResponseSchema>;
+export declare const marketServiceRoutes: {
+    /** POST /api/forge/service/kits/{slug}/licensed-package — service-key authed,
+     *  entitlement-gated, asserts userId. */
+    readonly licensedPackage: (slug: string) => string;
+};
 export declare const marketBackendPricingRoutes: {
     /** POST /admin/kits/{kitId}/pricing */
     readonly adminSetKitPricing: (kitId: string) => string;
