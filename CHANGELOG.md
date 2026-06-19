@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.12.0...v0.13.0) (2026-06-19)
+
+
+### Features
+
+* add Market service licensed-package route + schemas for Auto protected-kit resolution ([#11](https://github.com/AgentKitProject/agentkitproject-contracts/issues/11)) ([c9c8e67](https://github.com/AgentKitProject/agentkitproject-contracts/commit/c9c8e679151a77afcb34d4458532ed340c70075c))
+
 ## [0.12.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.11.0...v0.12.0) (2026-06-18)
 
 
