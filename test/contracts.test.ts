@@ -37,7 +37,25 @@ import {
   profileRoutes,
   publicKitDetailResponseSchema,
   publicPublisherProfileSchema,
-  serviceManifestSchema
+  serviceManifestSchema,
+  autoRunSchema,
+  autoApprovalSchema,
+  autoScheduleSchema,
+  publicAutoWebhookSchema,
+  autoWebhookSchema,
+  createAutoWebhookResponseSchema,
+  createAutoRunRequestSchema,
+  createAutoApprovalRequestSchema,
+  networkPolicySchema,
+  autoRunStatusSchema,
+  runTriggerSchema,
+  autoErrorCodeSchema,
+  autoRoutes,
+  forgeAutoRoutes,
+  autoHookRoutes,
+  autoInternalRoutes,
+  autoWebhookSecretHeader,
+  autoInternalServiceKeyHeader
 } from "../dist/index.js";
 
 const fixture = (name: string) =>
@@ -373,6 +391,121 @@ describe("contracts", () => {
       payoutsEnabled: false
     });
     assert.throws(() => setOrgStripeAccountRequestSchema.parse({ chargesEnabled: true, payoutsEnabled: true }));
+  });
+
+  it("auto fixtures satisfy their schemas", () => {
+    autoRunSchema.parse(fixture("auto-run.json"));
+    autoApprovalSchema.parse(fixture("auto-approval.json"));
+    autoScheduleSchema.parse(fixture("auto-schedule.json"));
+    publicAutoWebhookSchema.parse(fixture("auto-webhook.json"));
+  });
+
+  it("auto status + trigger enums and error codes", () => {
+    for (const s of ["queued", "running", "succeeded", "failed", "canceled", "budget_exceeded"]) {
+      autoRunStatusSchema.parse(s);
+    }
+    assert.throws(() => autoRunStatusSchema.parse("partial"));
+    for (const t of ["on_demand", "schedule", "webhook"]) runTriggerSchema.parse(t);
+    for (const code of [
+      "invalid_request",
+      "approval_denied",
+      "insufficient_balance",
+      "not_found",
+      "inputs_unconfigured",
+      "unauthorized",
+      "internal_auth_unconfigured"
+    ]) {
+      autoErrorCodeSchema.parse(code);
+    }
+    assert.throws(() => autoErrorCodeSchema.parse("nope"));
+  });
+
+  it("network policy union accepts deny_all and allowlist", () => {
+    networkPolicySchema.parse({ mode: "deny_all" });
+    networkPolicySchema.parse({ mode: "allowlist", hosts: ["api.example.com", "*.example.com"] });
+    assert.throws(() => networkPolicySchema.parse({ mode: "allowlist" }));
+    assert.throws(() => networkPolicySchema.parse({ mode: "other" }));
+  });
+
+  it("create-run + create-approval requests parse", () => {
+    createAutoRunRequestSchema.parse({
+      kitRef: { source: "local", localKitId: "k1" },
+      prompt: "do it",
+      budgetCents: 100
+    });
+    createAutoApprovalRequestSchema.parse({
+      kitRef: { source: "market", marketKitId: "k1" },
+      maxBudgetCents: 500
+    });
+    // kitRef refinement: market requires marketKitId.
+    assert.throws(() =>
+      createAutoApprovalRequestSchema.parse({ kitRef: { source: "market" }, maxBudgetCents: 1 })
+    );
+  });
+
+  it("webhook secret is never in list/get; create response carries one-time plaintext", () => {
+    // The public projection has no secretHash and no secret.
+    const pub = publicAutoWebhookSchema.parse(fixture("auto-webhook.json"));
+    assert.ok(!("secretHash" in pub));
+    assert.ok(!("secret" in pub));
+    assert.equal(typeof pub.ingestUrl, "string");
+    // publicAutoWebhookSchema strips secretHash even if present (zod .omit + strip).
+    const stripped = publicAutoWebhookSchema.parse({
+      ...fixture("auto-webhook.json"),
+      secretHash: "deadbeef"
+    });
+    assert.ok(!("secretHash" in stripped));
+    // The create response is the ONLY shape carrying the one-time plaintext secret.
+    const created = createAutoWebhookResponseSchema.parse({
+      ...fixture("auto-webhook.json"),
+      secret: "whsec_plaintext_shown_once"
+    });
+    assert.equal(created.secret, "whsec_plaintext_shown_once");
+    assert.ok(!("secretHash" in created));
+    // The persisted record schema DOES carry secretHash (server-internal only).
+    autoWebhookSchema.parse({
+      id: "wh1",
+      userId: "u1",
+      kitRef: { source: "local", localKitId: "k1" },
+      approvalId: "a1",
+      budgetCents: 100,
+      model: "claude-sonnet-4-6",
+      enabled: true,
+      secretHash: "deadbeef",
+      createdAt: "2026-06-20T00:00:00.000Z",
+      lastFiredAt: null,
+      lastRunId: null,
+      lastError: null,
+      fireCount: 0
+    });
+  });
+
+  it("auto route builders produce expected paths", () => {
+    const routes = fixture("routes.json");
+    assert.equal(autoRoutes.approvals(), routes.auto.approvals);
+    assert.equal(autoRoutes.revokeApproval("a1"), routes.auto.revokeApproval.replace("{id}", "a1"));
+    assert.equal(autoRoutes.run("r1"), routes.auto.run.replace("{id}", "r1"));
+    assert.equal(autoRoutes.cancelRun("r1"), routes.auto.cancelRun.replace("{id}", "r1"));
+    assert.equal(autoRoutes.runInputsUploadUrl(), routes.auto.runInputsUploadUrl);
+    assert.equal(autoRoutes.schedule("s1"), routes.auto.schedule.replace("{id}", "s1"));
+    assert.equal(autoRoutes.webhook("w1"), routes.auto.webhook.replace("{id}", "w1"));
+
+    assert.equal(forgeAutoRoutes.runs(), routes.forgeAuto.runs);
+    assert.equal(
+      forgeAutoRoutes.revokeApproval("a1"),
+      routes.forgeAuto.revokeApproval.replace("{id}", "a1")
+    );
+    assert.equal(forgeAutoRoutes.webhook("w1"), routes.forgeAuto.webhook.replace("{id}", "w1"));
+
+    assert.equal(
+      autoHookRoutes.ingest("w1"),
+      routes.autoHooks.ingest.replace("{webhookId}", "w1")
+    );
+    assert.equal(autoInternalRoutes.resolveContext(), routes.autoInternal.resolveContext);
+    assert.equal(autoInternalRoutes.sweep(), routes.autoInternal.sweep);
+
+    assert.equal(autoWebhookSecretHeader, "x-auto-webhook-secret");
+    assert.equal(autoInternalServiceKeyHeader, "x-service-key");
   });
 
   it("environments.json satisfies the service manifest schema", () => {

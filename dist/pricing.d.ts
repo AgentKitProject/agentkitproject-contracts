@@ -82,11 +82,11 @@ export declare const entitlementSchema: z.ZodObject<{
     stripeSubscriptionId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     status: "active" | "revoked" | "expired";
+    source: "free" | "purchase" | "admin_grant";
     userId: string;
     kitId: string;
     licenseVersion: string;
     entitlementId: string;
-    source: "free" | "purchase" | "admin_grant";
     licenseAcceptedAt: string;
     licenseTextSnapshot: string;
     grantedAt: string;
@@ -94,11 +94,11 @@ export declare const entitlementSchema: z.ZodObject<{
     stripeSubscriptionId?: string | null | undefined;
 }, {
     status: "active" | "revoked" | "expired";
+    source: "free" | "purchase" | "admin_grant";
     userId: string;
     kitId: string;
     licenseVersion: string;
     entitlementId: string;
-    source: "free" | "purchase" | "admin_grant";
     licenseAcceptedAt: string;
     licenseTextSnapshot: string;
     grantedAt: string;
@@ -157,17 +157,17 @@ export declare const grantEntitlementRequestSchema: z.ZodObject<{
     expiresAt: z.ZodOptional<z.ZodString>;
     stripeSubscriptionId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
+    source: "free" | "purchase" | "admin_grant";
     userId: string;
     licenseVersion: string;
-    source: "free" | "purchase" | "admin_grant";
     licenseAcceptedAt: string;
     licenseTextSnapshot: string;
     expiresAt?: string | undefined;
     stripeSubscriptionId?: string | null | undefined;
 }, {
+    source: "free" | "purchase" | "admin_grant";
     userId: string;
     licenseVersion: string;
-    source: "free" | "purchase" | "admin_grant";
     licenseAcceptedAt: string;
     licenseTextSnapshot: string;
     expiresAt?: string | undefined;
@@ -275,11 +275,11 @@ export declare const listEntitlementsResponseSchema: z.ZodObject<{
         stripeSubscriptionId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
         status: "active" | "revoked" | "expired";
+        source: "free" | "purchase" | "admin_grant";
         userId: string;
         kitId: string;
         licenseVersion: string;
         entitlementId: string;
-        source: "free" | "purchase" | "admin_grant";
         licenseAcceptedAt: string;
         licenseTextSnapshot: string;
         grantedAt: string;
@@ -287,11 +287,11 @@ export declare const listEntitlementsResponseSchema: z.ZodObject<{
         stripeSubscriptionId?: string | null | undefined;
     }, {
         status: "active" | "revoked" | "expired";
+        source: "free" | "purchase" | "admin_grant";
         userId: string;
         kitId: string;
         licenseVersion: string;
         entitlementId: string;
-        source: "free" | "purchase" | "admin_grant";
         licenseAcceptedAt: string;
         licenseTextSnapshot: string;
         grantedAt: string;
@@ -301,11 +301,11 @@ export declare const listEntitlementsResponseSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     items: {
         status: "active" | "revoked" | "expired";
+        source: "free" | "purchase" | "admin_grant";
         userId: string;
         kitId: string;
         licenseVersion: string;
         entitlementId: string;
-        source: "free" | "purchase" | "admin_grant";
         licenseAcceptedAt: string;
         licenseTextSnapshot: string;
         grantedAt: string;
@@ -315,11 +315,11 @@ export declare const listEntitlementsResponseSchema: z.ZodObject<{
 }, {
     items: {
         status: "active" | "revoked" | "expired";
+        source: "free" | "purchase" | "admin_grant";
         userId: string;
         kitId: string;
         licenseVersion: string;
         entitlementId: string;
-        source: "free" | "purchase" | "admin_grant";
         licenseAcceptedAt: string;
         licenseTextSnapshot: string;
         grantedAt: string;
@@ -392,9 +392,9 @@ export declare const serviceLicensedPackageResponseSchema: z.ZodObject<{
     downloadable: z.ZodBoolean;
     onlineOnly: z.ZodBoolean;
 }, "strip", z.ZodTypeAny, {
+    slug: string;
     userId: string;
     kitId: string;
-    slug: string;
     fileName: string;
     sha256: string;
     pricing: "free" | "paid";
@@ -411,9 +411,9 @@ export declare const serviceLicensedPackageResponseSchema: z.ZodObject<{
     };
     onlineOnly: boolean;
 }, {
+    slug: string;
     userId: string;
     kitId: string;
-    slug: string;
     fileName: string;
     sha256: string;
     pricing: "free" | "paid";

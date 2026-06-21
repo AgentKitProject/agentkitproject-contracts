@@ -23,17 +23,17 @@ export declare const favoriteSchema: z.ZodObject<{
     summary: z.ZodOptional<z.ZodString>;
     publisherName: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    slug: string;
     userId: string;
     kitId: string;
-    slug: string;
     addedAt: string;
     displayName?: string | undefined;
     summary?: string | undefined;
     publisherName?: string | undefined;
 }, {
+    slug: string;
     userId: string;
     kitId: string;
-    slug: string;
     addedAt: string;
     displayName?: string | undefined;
     summary?: string | undefined;
@@ -45,17 +45,17 @@ export declare const addFavoriteRequestSchema: z.ZodEffects<z.ZodObject<{
     slug: z.ZodOptional<z.ZodString>;
     kitId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    kitId?: string | undefined;
     slug?: string | undefined;
+    kitId?: string | undefined;
 }, {
-    kitId?: string | undefined;
     slug?: string | undefined;
+    kitId?: string | undefined;
 }>, {
-    kitId?: string | undefined;
     slug?: string | undefined;
+    kitId?: string | undefined;
 }, {
-    kitId?: string | undefined;
     slug?: string | undefined;
+    kitId?: string | undefined;
 }>;
 export type AddFavoriteRequest = z.infer<typeof addFavoriteRequestSchema>;
 export declare const listFavoritesResponseSchema: z.ZodObject<{
@@ -69,17 +69,17 @@ export declare const listFavoritesResponseSchema: z.ZodObject<{
         summary: z.ZodOptional<z.ZodString>;
         publisherName: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
+        slug: string;
         userId: string;
         kitId: string;
-        slug: string;
         addedAt: string;
         displayName?: string | undefined;
         summary?: string | undefined;
         publisherName?: string | undefined;
     }, {
+        slug: string;
         userId: string;
         kitId: string;
-        slug: string;
         addedAt: string;
         displayName?: string | undefined;
         summary?: string | undefined;
@@ -87,9 +87,9 @@ export declare const listFavoritesResponseSchema: z.ZodObject<{
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
     items: {
+        slug: string;
         userId: string;
         kitId: string;
-        slug: string;
         addedAt: string;
         displayName?: string | undefined;
         summary?: string | undefined;
@@ -97,9 +97,9 @@ export declare const listFavoritesResponseSchema: z.ZodObject<{
     }[];
 }, {
     items: {
+        slug: string;
         userId: string;
         kitId: string;
-        slug: string;
         addedAt: string;
         displayName?: string | undefined;
         summary?: string | undefined;
@@ -111,11 +111,11 @@ export declare const removeFavoriteResponseSchema: z.ZodObject<{
     ok: z.ZodLiteral<true>;
     kitId: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    kitId: string;
     ok: true;
+    kitId: string;
 }, {
-    kitId: string;
     ok: true;
+    kitId: string;
 }>;
 export type RemoveFavoriteResponse = z.infer<typeof removeFavoriteResponseSchema>;
 export declare const marketBackendFavoritesRoutes: {
