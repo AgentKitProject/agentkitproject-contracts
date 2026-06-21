@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.13.0...v0.14.0) (2026-06-21)
+
+
+### Features
+
+* **auto:** add AgentKitAuto cross-repo contracts ([#13](https://github.com/AgentKitProject/agentkitproject-contracts/issues/13)) ([ddf25b7](https://github.com/AgentKitProject/agentkitproject-contracts/commit/ddf25b7c75b22e6beb20c19c8f57b254c72f8b76))
+
 ## [0.13.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.12.0...v0.13.0) (2026-06-19)
 
 
