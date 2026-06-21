@@ -53,10 +53,10 @@ export declare const organizationSchema: z.ZodObject<{
     type: "personal" | "team";
     orgId: string;
     slug: string;
-    displayName: string;
-    updatedAt: string;
-    ownerUserId: string;
     createdAt: string;
+    updatedAt: string;
+    displayName: string;
+    ownerUserId: string;
     handle?: string | undefined;
     avatarInitials?: string | undefined;
     verified?: boolean | undefined;
@@ -69,10 +69,10 @@ export declare const organizationSchema: z.ZodObject<{
     type: "personal" | "team";
     orgId: string;
     slug: string;
-    displayName: string;
-    updatedAt: string;
-    ownerUserId: string;
     createdAt: string;
+    updatedAt: string;
+    displayName: string;
+    ownerUserId: string;
     handle?: string | undefined;
     avatarInitials?: string | undefined;
     verified?: boolean | undefined;

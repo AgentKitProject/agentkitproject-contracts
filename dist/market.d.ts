@@ -144,14 +144,14 @@ export declare const forgeUploadUrlResponseSchema: z.ZodObject<{
     fields: z.ZodRecord<z.ZodString, z.ZodString>;
     headers: z.ZodRecord<z.ZodString, z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    submissionId: string;
     uploadUrl: string;
+    submissionId: string;
     method: "PUT" | "POST";
     fields: Record<string, string>;
     headers: Record<string, string>;
 }, {
-    submissionId: string;
     uploadUrl: string;
+    submissionId: string;
     method: "PUT" | "POST";
     fields: Record<string, string>;
     headers: Record<string, string>;
@@ -175,9 +175,9 @@ export declare const forgeDownloadResponseSchema: z.ZodObject<{
     expiresIn: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
     downloadUrl: string;
+    marketKitId?: string | undefined;
     fileName?: string | undefined;
     version?: string | undefined;
-    marketKitId?: string | undefined;
     marketSlug?: string | undefined;
     sha256?: string | undefined;
     packageSizeBytes?: number | undefined;
@@ -186,9 +186,9 @@ export declare const forgeDownloadResponseSchema: z.ZodObject<{
     expiresIn?: number | undefined;
 }, {
     downloadUrl: string;
+    marketKitId?: string | undefined;
     fileName?: string | undefined;
     version?: string | undefined;
-    marketKitId?: string | undefined;
     marketSlug?: string | undefined;
     sha256?: string | undefined;
     packageSizeBytes?: number | undefined;
@@ -569,8 +569,8 @@ export declare const publicKitDetailResponseSchema: z.ZodObject<{
     }, z.ZodTypeAny, "passthrough">>;
 }, "strip", z.ZodTypeAny, {
     item: {
-        kitId: string;
         slug: string;
+        kitId: string;
         summary: string;
         name: string;
         currentVersion: string | null;
@@ -582,6 +582,7 @@ export declare const publicKitDetailResponseSchema: z.ZodObject<{
             publishedAt?: string | null | undefined;
             schemaVersion?: string | null | undefined;
         } | null;
+        updatedAt?: string | null | undefined;
         description?: string | null | undefined;
         categories?: string[] | undefined;
         tags?: string[] | undefined;
@@ -594,14 +595,13 @@ export declare const publicKitDetailResponseSchema: z.ZodObject<{
             publishedAt?: string | null | undefined;
             schemaVersion?: string | null | undefined;
         }[] | undefined;
-        updatedAt?: string | null | undefined;
     } & {
         [k: string]: unknown;
     };
 }, {
     item: {
-        kitId: string;
         slug: string;
+        kitId: string;
         summary: string;
         name: string;
         currentVersion: string | null;
@@ -613,6 +613,7 @@ export declare const publicKitDetailResponseSchema: z.ZodObject<{
             publishedAt?: string | null | undefined;
             schemaVersion?: string | null | undefined;
         } | null;
+        updatedAt?: string | null | undefined;
         description?: string | null | undefined;
         categories?: string[] | undefined;
         tags?: string[] | undefined;
@@ -625,7 +626,6 @@ export declare const publicKitDetailResponseSchema: z.ZodObject<{
             publishedAt?: string | null | undefined;
             schemaVersion?: string | null | undefined;
         }[] | undefined;
-        updatedAt?: string | null | undefined;
     } & {
         [k: string]: unknown;
     };

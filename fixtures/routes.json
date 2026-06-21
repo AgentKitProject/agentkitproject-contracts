@@ -68,5 +68,36 @@
   },
   "browserAudit": {
     "auditLogs": "/api/admin/audit-logs"
+  },
+  "auto": {
+    "approvals": "/api/auto/approvals",
+    "revokeApproval": "/api/auto/approvals/{id}/revoke",
+    "runs": "/api/auto/runs",
+    "run": "/api/auto/runs/{id}",
+    "cancelRun": "/api/auto/runs/{id}/cancel",
+    "runInputsUploadUrl": "/api/auto/runs/inputs/upload-url",
+    "schedules": "/api/auto/schedules",
+    "schedule": "/api/auto/schedules/{id}",
+    "webhooks": "/api/auto/webhooks",
+    "webhook": "/api/auto/webhooks/{id}"
+  },
+  "forgeAuto": {
+    "approvals": "/api/forge/auto/approvals",
+    "revokeApproval": "/api/forge/auto/approvals/{id}/revoke",
+    "runs": "/api/forge/auto/runs",
+    "run": "/api/forge/auto/runs/{id}",
+    "cancelRun": "/api/forge/auto/runs/{id}/cancel",
+    "runInputsUploadUrl": "/api/forge/auto/runs/inputs/upload-url",
+    "schedules": "/api/forge/auto/schedules",
+    "schedule": "/api/forge/auto/schedules/{id}",
+    "webhooks": "/api/forge/auto/webhooks",
+    "webhook": "/api/forge/auto/webhooks/{id}"
+  },
+  "autoHooks": {
+    "ingest": "/api/hooks/auto/{webhookId}"
+  },
+  "autoInternal": {
+    "resolveContext": "/api/internal/auto/resolve-context",
+    "sweep": "/api/internal/auto/sweep"
   }
 }
