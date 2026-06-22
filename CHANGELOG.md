@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.14.0...v0.15.0) (2026-06-22)
+
+
+### Features
+
+* add autoApp (auto.agentkitproject.com) to environments manifest ([#15](https://github.com/AgentKitProject/agentkitproject-contracts/issues/15)) ([0da5fa9](https://github.com/AgentKitProject/agentkitproject-contracts/commit/0da5fa981824e1bfa803a5f3d269210205b75c83))
+
 ## [0.14.0](https://github.com/AgentKitProject/agentkitproject-contracts/compare/v0.13.0...v0.14.0) (2026-06-21)
 
 
